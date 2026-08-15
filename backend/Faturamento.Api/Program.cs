@@ -1,17 +1,38 @@
+using Faturamento.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configuração do banco de dados SQL Server
+builder.Services.AddDbContext<FaturamentoDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
 
+// HttpClient para comunicação com o microsserviço de Estoque
+builder.Services.AddHttpClient("EstoqueApi", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7290/");
+});
+
+// Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// OpenAPI
 builder.Services.AddOpenApi();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuração para ambiente de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
