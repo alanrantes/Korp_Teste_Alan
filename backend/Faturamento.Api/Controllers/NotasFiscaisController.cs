@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using Faturamento.Api.Data;
 using Faturamento.Api.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -56,22 +57,32 @@ public class NotasFiscaisController : ControllerBase
 
         var client = _httpClientFactory.CreateClient("EstoqueApi");
 
-        foreach (var item in nota.Itens)
+        try
         {
-            var response = await client.GetAsync($"api/Produtos/{item.ProdutoId}");
-
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            foreach (var item in nota.Itens)
             {
-                return BadRequest($"O produto de ID {item.ProdutoId} não existe.");
-            }
+                var response = await client.GetAsync($"api/Produtos/{item.ProdutoId}");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                return StatusCode(
-                    StatusCodes.Status503ServiceUnavailable,
-                    "Não foi possível validar os produtos no serviço de estoque."
-                );
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return BadRequest($"O produto de ID {item.ProdutoId} não existe.");
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode(
+                        StatusCodes.Status503ServiceUnavailable,
+                        "Não foi possível validar os produtos no serviço de estoque."
+                    );
+                }
             }
+        }
+        catch (HttpRequestException)
+        {
+            return StatusCode(
+                StatusCodes.Status503ServiceUnavailable,
+                "O serviço de estoque está indisponível no momento. Tente novamente mais tarde."
+            );
         }
 
         nota.Numero = await _context.NotasFiscais.AnyAsync()
@@ -110,28 +121,38 @@ public class NotasFiscaisController : ControllerBase
 
         var client = _httpClientFactory.CreateClient("EstoqueApi");
 
-        foreach (var item in nota.Itens)
+        try
         {
-            var request = new BaixaEstoqueRequest
+            foreach (var item in nota.Itens)
             {
-                ProdutoId = item.ProdutoId,
-                Quantidade = item.Quantidade
-            };
+                var request = new BaixaEstoqueRequest
+                {
+                    ProdutoId = item.ProdutoId,
+                    Quantidade = item.Quantidade
+                };
 
-            var response = await client.PostAsJsonAsync(
-                "api/Produtos/baixar-estoque",
-                request
-            );
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var erro = await response.Content.ReadAsStringAsync();
-
-                return StatusCode(
-                    (int)response.StatusCode,
-                    $"Erro ao atualizar estoque: {erro}"
+                var response = await client.PostAsJsonAsync(
+                    "api/Produtos/baixar-estoque",
+                    request
                 );
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var erro = await response.Content.ReadAsStringAsync();
+
+                    return StatusCode(
+                        (int)response.StatusCode,
+                        $"Erro ao atualizar estoque: {erro}"
+                    );
+                }
             }
+        }
+        catch (HttpRequestException)
+        {
+            return StatusCode(
+                StatusCodes.Status503ServiceUnavailable,
+                "O serviço de estoque está indisponível no momento. A nota permanece aberta."
+            );
         }
 
         nota.Status = "Fechada";
