@@ -18,6 +18,18 @@ builder.Services.AddHttpClient("EstoqueApi", client =>
 // Controllers
 builder.Services.AddControllers();
 
+// CORS - permite acesso do frontend Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Angular", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // OpenAPI
 builder.Services.AddOpenApi();
 
@@ -36,6 +48,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("Angular");
 
 app.UseAuthorization();
 

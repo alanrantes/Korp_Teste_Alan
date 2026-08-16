@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Produto, ProdutoService } from '../../services/produto';
@@ -23,7 +23,10 @@ export class Produtos implements OnInit {
   editando = false;
   mensagem = '';
 
-  constructor(private produtoService: ProdutoService) { }
+  constructor(
+    private produtoService: ProdutoService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.carregarProdutos();
@@ -33,9 +36,11 @@ export class Produtos implements OnInit {
     this.produtoService.listar().subscribe({
       next: (dados) => {
         this.produtos = dados;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.mensagem = 'Erro ao carregar produtos.';
+        this.cdr.markForCheck();
       },
     });
   }
@@ -49,10 +54,12 @@ export class Produtos implements OnInit {
             this.mensagem = 'Produto atualizado com sucesso.';
             this.limparFormulario();
             this.carregarProdutos();
+            this.cdr.markForCheck();
           },
           error: (erro) => {
             this.mensagem =
               erro.error ?? 'Erro ao atualizar produto.';
+            this.cdr.markForCheck();
           },
         });
 
@@ -64,10 +71,12 @@ export class Produtos implements OnInit {
         this.mensagem = 'Produto cadastrado com sucesso.';
         this.limparFormulario();
         this.carregarProdutos();
+        this.cdr.markForCheck();
       },
       error: (erro) => {
         this.mensagem =
           erro.error ?? 'Erro ao cadastrar produto.';
+        this.cdr.markForCheck();
       },
     });
   }
@@ -82,9 +91,11 @@ export class Produtos implements OnInit {
       next: () => {
         this.mensagem = 'Produto excluído com sucesso.';
         this.carregarProdutos();
+        this.cdr.markForCheck();
       },
       error: () => {
         this.mensagem = 'Erro ao excluir produto.';
+        this.cdr.markForCheck();
       },
     });
   }

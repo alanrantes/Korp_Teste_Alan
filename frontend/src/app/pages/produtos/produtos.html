@@ -1,1 +1,83 @@
-<p>produtos works!</p>
+<section class="produtos-container">
+  <h2>Cadastro de Produtos</h2>
+
+  <form (ngSubmit)="salvar()">
+    <div>
+      <label for="codigo">Código</label>
+      <input id="codigo"
+             name="codigo"
+             type="text"
+             [(ngModel)]="produtoForm.codigo"
+             required />
+    </div>
+
+    <div>
+      <label for="descricao">Descrição</label>
+      <input id="descricao"
+             name="descricao"
+             type="text"
+             [(ngModel)]="produtoForm.descricao"
+             required />
+    </div>
+
+    <div>
+      <label for="saldo">Saldo</label>
+      <input id="saldo"
+             name="saldo"
+             type="number"
+             [(ngModel)]="produtoForm.saldo"
+             min="0"
+             required />
+    </div>
+
+    <button type="submit">
+      {{ editando ? 'Atualizar' : 'Cadastrar' }}
+    </button>
+
+    <button *ngIf="editando"
+            type="button"
+            (click)="limparFormulario()">
+      Cancelar
+    </button>
+  </form>
+
+  <p *ngIf="mensagem">
+    {{ mensagem }}
+  </p>
+
+  <hr />
+
+  <h3>Produtos cadastrados</h3>
+
+  <table *ngIf="produtos.length > 0">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Saldo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let produto of produtos">
+        <td>{{ produto.codigo }}</td>
+        <td>{{ produto.descricao }}</td>
+        <td>{{ produto.saldo }}</td>
+        <td>
+          <button type="button" (click)="editar(produto)">
+            Editar
+          </button>
+
+          <button type="button" (click)="excluir(produto.id)">
+            Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="produtos.length === 0">
+    Nenhum produto cadastrado.
+  </p>
+</section>
