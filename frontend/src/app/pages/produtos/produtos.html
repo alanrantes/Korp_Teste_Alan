@@ -1,10 +1,11 @@
 <section class="products-page">
 
-  <!-- RESUMO SUPERIOR -->
+  <!-- RESUMO -->
 
   <div class="overview-row">
 
     <div class="overview-item">
+
       <div class="overview-icon">
         ▦
       </div>
@@ -18,12 +19,13 @@
 
         <small>
           {{
- produtos.length === 1
-            ? 'produto cadastrado'
-            : 'produtos cadastrados'
+            produtos.length === 1
+              ? 'produto cadastrado'
+              : 'produtos cadastrados'
           }}
         </small>
       </div>
+
     </div>
 
 
@@ -31,6 +33,7 @@
 
 
     <div class="overview-item">
+
       <div class="overview-icon overview-icon-success">
         ✓
       </div>
@@ -46,6 +49,7 @@
           Dados persistidos no serviço de estoque
         </small>
       </div>
+
     </div>
 
   </div>
@@ -85,7 +89,7 @@
 
       <div class="fields-grid">
 
-        <div class="field-group field-code">
+        <div class="field-group">
 
           <label for="codigo">
             Código
@@ -105,7 +109,7 @@
         </div>
 
 
-        <div class="field-group field-stock">
+        <div class="field-group">
 
           <label for="saldo">
             Saldo inicial
@@ -157,7 +161,6 @@
           Cancelar edição
         </button>
 
-
         <button type="submit"
                 class="button button-primary">
           <span>
@@ -165,9 +168,9 @@
           </span>
 
           {{
- editando
-            ? 'Salvar alterações'
-            : 'Cadastrar produto'
+            editando
+              ? 'Salvar alterações'
+              : 'Cadastrar produto'
           }}
         </button>
 
@@ -178,9 +181,7 @@
 
     <div *ngIf="mensagem"
          class="message-box">
-      <span class="message-icon">
-        i
-      </span>
+      <span class="message-icon">i</span>
 
       <span>
         {{ mensagem }}
@@ -196,7 +197,8 @@
 
     <div class="inventory-header">
 
-      <div>
+      <div class="inventory-title">
+
         <span class="section-kicker">
           INVENTÁRIO
         </span>
@@ -206,26 +208,64 @@
         </h2>
 
         <p>
-          Consulte, edite ou remova os produtos disponíveis.
+          Consulte, pesquise, edite ou remova os produtos disponíveis.
         </p>
+
       </div>
 
 
-      <div class="inventory-counter">
-        {{ produtos.length }}
-        {{ produtos.length === 1 ? 'registro' : 'registros' }}
+      <div class="inventory-tools">
+
+        <div class="search-box">
+
+          <span class="search-icon">
+            ⌕
+          </span>
+
+          <input type="text"
+                 name="termoBusca"
+                 [(ngModel)]="termoBusca"
+                 placeholder="Buscar por código ou descrição..." />
+
+          <button *ngIf="termoBusca"
+                  type="button"
+                  class="clear-search"
+                  (click)="limparBusca()"
+                  title="Limpar busca">
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="inventory-counter">
+
+          <ng-container *ngIf="!termoBusca">
+            {{ produtos.length }}
+            {{ produtos.length === 1 ? 'registro' : 'registros' }}
+          </ng-container>
+
+          <ng-container *ngIf="termoBusca">
+            {{ produtosFiltrados.length }}
+            de
+            {{ produtos.length }}
+          </ng-container>
+
+        </div>
+
       </div>
 
     </div>
 
 
+    <!-- TABELA -->
+
     <div class="inventory-table-wrapper"
-         *ngIf="produtos.length > 0">
+         *ngIf="produtos.length > 0 && produtosFiltrados.length > 0">
 
       <table>
 
         <thead>
-
           <tr>
             <th>Código</th>
             <th>Produto</th>
@@ -234,13 +274,12 @@
               Ações
             </th>
           </tr>
-
         </thead>
 
 
         <tbody>
 
-          <tr *ngFor="let produto of produtos">
+          <tr *ngFor="let produto of produtosFiltrados">
 
             <td>
 
@@ -313,6 +352,36 @@
 
     </div>
 
+
+    <!-- BUSCA SEM RESULTADO -->
+
+    <div *ngIf="produtos.length > 0 && produtosFiltrados.length === 0"
+         class="empty-inventory">
+
+      <div class="empty-illustration">
+        ⌕
+      </div>
+
+      <h3>
+        Nenhum produto encontrado
+      </h3>
+
+      <p>
+        Não encontramos produtos para
+        <strong>"{{ termoBusca }}"</strong>.
+        Tente outro código ou descrição.
+      </p>
+
+      <button type="button"
+              class="clear-filter-button"
+              (click)="limparBusca()">
+        Limpar pesquisa
+      </button>
+
+    </div>
+
+
+    <!-- SEM PRODUTOS -->
 
     <div *ngIf="produtos.length === 0"
          class="empty-inventory">

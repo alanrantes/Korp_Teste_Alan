@@ -207,29 +207,7 @@
   <!-- PRODUTOS -->
 
   <main *ngIf="secaoAtual === 'produtos'"
-        class="page-content">
-
-    <section class="page-heading">
-
-      <button type="button"
-              class="back-button"
-              (click)="alterarSecao('inicio')">
-        ←
-      </button>
-
-      <div class="section-number">01</div>
-
-      <div>
-        <span class="section-label">ESTOQUE</span>
-
-        <h1>Gestão de Produtos</h1>
-
-        <p>
-          Cadastre, edite e acompanhe o saldo disponível dos seus produtos.
-        </p>
-      </div>
-
-    </section>
+        class="page-content products-page-content">
 
     <div class="module-card">
       <app-produtos></app-produtos>

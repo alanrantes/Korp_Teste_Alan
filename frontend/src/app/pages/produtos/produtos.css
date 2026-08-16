@@ -11,24 +11,26 @@
 
 .products-page {
   width: 100%;
-  padding: 18px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
 
-/* RESUMO SUPERIOR */
+/* =========================================================
+   RESUMO
+   ========================================================= */
 
 .overview-row {
   width: 100%;
-  min-height: 72px;
-  padding: 12px 16px;
+  min-height: 82px;
+  padding: 15px 19px;
   display: flex;
   align-items: center;
   background: linear-gradient( 120deg, #fafaff, #f6f7ff );
   border: 1px solid #e7e8f1;
-  border-radius: 14px;
+  border-radius: 15px;
 }
 
 .overview-item {
@@ -36,29 +38,29 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .overview-divider {
   width: 1px;
-  height: 38px;
-  margin: 0 18px;
+  height: 44px;
+  margin: 0 22px;
   flex: 0 0 auto;
   background: #e1e3eb;
 }
 
 .overview-icon {
-  width: 38px;
-  height: 38px;
-  flex: 0 0 38px;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
   display: grid;
   place-items: center;
   color: #6157df;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   background: #fff;
   border: 1px solid #e5e3fa;
-  border-radius: 10px;
+  border-radius: 11px;
 }
 
 .overview-icon-success {
@@ -69,60 +71,62 @@
 
 .overview-label {
   display: block;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   color: #7067df;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 850;
   letter-spacing: 0.13em;
 }
 
 .overview-data strong {
   display: inline-block;
-  margin-right: 6px;
+  margin-right: 7px;
   color: #20283a;
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 800;
-  line-height: 1;
 }
 
 .overview-data .status-title {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .overview-data small {
   color: #8991a2;
-  font-size: 9px;
+  font-size: 10px;
 }
 
 
-/* CARDS */
+/* =========================================================
+   CARDS
+   ========================================================= */
 
 .form-card,
 .inventory-card {
   width: 100%;
+  overflow: hidden;
   background: #fff;
   border: 1px solid #e6e8ee;
-  border-radius: 15px;
-  overflow: hidden;
+  border-radius: 16px;
 }
 
 
-/* CABEÇALHO DO FORM */
+/* =========================================================
+   CABEÇALHO DO CADASTRO
+   ========================================================= */
 
 .card-header {
-  width: 100%;
-  padding: 16px 18px 12px;
+  padding: 16px 22px 10px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: 18px;
 }
 
 .section-kicker {
   display: block;
   margin-bottom: 5px;
   color: #675ddd;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 850;
   letter-spacing: 0.14em;
 }
@@ -131,7 +135,7 @@
 .inventory-header h2 {
   margin: 0;
   color: #202638;
-  font-size: 17px;
+  font-size: 19px;
   letter-spacing: -0.02em;
 }
 
@@ -139,12 +143,12 @@
 .inventory-header p {
   margin: 4px 0 0;
   color: #8d95a5;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.45;
 }
 
 .editing-badge {
-  padding: 5px 9px;
+  padding: 6px 10px;
   color: #5b51cc;
   font-size: 9px;
   font-weight: 750;
@@ -154,18 +158,37 @@
 }
 
 
-/* FORMULÁRIO */
+/* =========================================================
+   FORMULÁRIO
+   Código | Descrição | Saldo
+   ========================================================= */
 
 .product-form {
   width: 100%;
-  padding: 2px 18px 16px;
+  padding: 2px 22px 16px;
 }
 
 .fields-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 0.42fr);
-  gap: 14px 18px;
+  grid-template-columns: minmax(180px, 0.85fr) minmax(300px, 1.65fr) minmax(150px, 0.6fr);
+  grid-template-areas:
+    "codigo descricao saldo";
+  column-gap: 22px;
+  align-items: start;
+}
+
+  .fields-grid > .field-group:nth-child(1) {
+    grid-area: codigo;
+  }
+
+  .fields-grid > .field-group:nth-child(2) {
+    grid-area: saldo;
+  }
+
+.field-description {
+  grid-area: descricao;
+  grid-column: auto;
 }
 
 .field-group {
@@ -173,139 +196,233 @@
   min-width: 0;
 }
 
-.field-description {
-  grid-column: 1 / -1;
-}
-
-.field-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #444d60;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.field-group input {
-  width: 100%;
-  max-width: 100%;
-  height: 38px;
-  display: block;
-  margin: 0;
-  padding: 0 11px;
-  color: #252c3e;
-  font-family: inherit;
-  font-size: 11px;
-  outline: none;
-  background: #fafbfc;
-  border: 1px solid #dce0e7;
-  border-radius: 8px;
-  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-  .field-group input::placeholder {
-    color: #b1b7c3;
+  .field-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #444d60;
+    font-size: 11px;
+    font-weight: 700;
   }
 
-  .field-group input:focus {
-    background: #fff;
-    border-color: #766de5;
-    box-shadow: 0 0 0 3px rgba(100, 91, 221, 0.08);
+  .field-group input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 40px;
+    margin: 0;
+    padding: 0 13px;
+    color: #252c3e;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    background: #fafbfc;
+    border: 1px solid #dce0e7;
+    border-radius: 9px;
+    transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
   }
 
-.field-group small {
-  display: block;
-  margin-top: 4px;
-  color: #a0a6b2;
-  font-size: 8px;
-}
+    .field-group input::placeholder {
+      color: #b1b7c3;
+    }
+
+    .field-group input:hover {
+      border-color: #cbd0db;
+    }
+
+    .field-group input:focus {
+      background: #fff;
+      border-color: #766de5;
+      box-shadow: 0 0 0 3px rgba(100, 91, 221, 0.08);
+    }
+
+  .field-group small {
+    display: block;
+    margin-top: 4px;
+    color: #a0a6b2;
+    font-size: 8px;
+    white-space: nowrap;
+  }
 
 
-/* FOOTER FORMULÁRIO */
+/* =========================================================
+   BOTÃO
+   ========================================================= */
 
 .form-footer {
   width: 100%;
-  margin-top: 14px;
+  margin-top: 13px;
   padding-top: 12px;
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 8px;
   border-top: 1px solid #eef0f3;
 }
 
 .button {
-  min-height: 36px;
-  padding: 0 15px;
+  min-height: 37px;
+  padding: 0 17px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 750;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 9px;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
 .button-primary {
-  min-width: 160px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
   color: #fff;
   background: linear-gradient( 135deg, #5147dc, #6b58e4 );
   border: 0;
-  box-shadow: 0 6px 14px rgba(81, 71, 220, 0.16);
+  box-shadow: 0 7px 16px rgba(81, 71, 220, 0.18);
 }
 
+  .button-primary:hover {
+    box-shadow: 0 10px 22px rgba(81, 71, 220, 0.24);
+  }
+
 .button-secondary {
+  width: 100%;
   color: #626b7c;
   background: #f4f5f7;
   border: 1px solid #e4e6ea;
 }
 
 
-/* FEEDBACK */
+/* =========================================================
+   FEEDBACK
+   ========================================================= */
 
 .message-box {
-  margin: 0 18px 14px;
-  padding: 8px 10px;
+  margin: 0 22px 14px;
+  padding: 9px 11px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   color: #555e71;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
   background: #f5f5ff;
   border: 1px solid #e2e0ff;
-  border-radius: 8px;
+  border-radius: 9px;
 }
 
 .message-icon {
-  width: 17px;
-  height: 17px;
-  flex: 0 0 17px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
   display: grid;
   place-items: center;
   color: #fff;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   background: #675edf;
   border-radius: 50%;
 }
 
 
-/* INVENTÁRIO */
+/* =========================================================
+   INVENTÁRIO
+   ========================================================= */
 
 .inventory-header {
-  width: 100%;
-  padding: 15px 18px;
+  padding: 15px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 22px;
   border-bottom: 1px solid #eceef2;
 }
 
+.inventory-title {
+  flex: 1;
+  min-width: 210px;
+}
+
+.inventory-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* =========================================================
+   BUSCA
+   ========================================================= */
+
+.search-box {
+  width: 300px;
+  height: 38px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+  .search-box input {
+    width: 100%;
+    height: 100%;
+    padding: 0 38px 0 37px;
+    color: #343c4e;
+    font-family: inherit;
+    font-size: 11px;
+    outline: none;
+    background: #fafbfc;
+    border: 1px solid #dfe2e8;
+    border-radius: 10px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  }
+
+    .search-box input::placeholder {
+      color: #a5acb9;
+    }
+
+    .search-box input:focus {
+      background: #fff;
+      border-color: #766de5;
+      box-shadow: 0 0 0 3px rgba(100, 91, 221, 0.08);
+    }
+
+.search-icon {
+  position: absolute;
+  left: 13px;
+  z-index: 1;
+  color: #827ae0;
+  font-size: 17px;
+  pointer-events: none;
+}
+
+.clear-search {
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  color: #888fa0;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+}
+
+  .clear-search:hover {
+    color: #554bcd;
+    background: #efefff;
+  }
+
 .inventory-counter {
-  padding: 5px 9px;
+  padding: 6px 10px;
   flex: 0 0 auto;
   color: #737c8d;
   font-size: 9px;
@@ -315,9 +432,14 @@
   border-radius: 999px;
 }
 
+
+/* =========================================================
+   TABELA COM SCROLL INTERNO
+   ========================================================= */
+
 .inventory-table-wrapper {
   width: 100%;
-  max-height: 205px;
+  max-height: 250px;
   overflow-x: auto;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -325,8 +447,12 @@
 }
 
   .inventory-table-wrapper::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .inventory-table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .inventory-table-wrapper::-webkit-scrollbar-thumb {
@@ -334,12 +460,18 @@
     border-radius: 999px;
   }
 
+    .inventory-table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #aaa6df;
+    }
 
-/* TABELA */
+
+/* =========================================================
+   TABELA
+   ========================================================= */
 
 table {
   width: 100%;
-  min-width: 680px;
+  min-width: 700px;
   border-collapse: collapse;
 }
 
@@ -351,7 +483,7 @@ thead {
 
 th,
 td {
-  padding: 10px 13px;
+  padding: 11px 15px;
   text-align: left;
   vertical-align: middle;
   border-bottom: 1px solid #eef0f3;
@@ -359,7 +491,7 @@ td {
 
 th {
   color: #8a92a3;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -368,7 +500,7 @@ th {
 
 td {
   color: #4d5668;
-  font-size: 10px;
+  font-size: 11px;
   background: #fff;
 }
 
@@ -376,15 +508,21 @@ tbody tr:hover td {
   background: #fbfbfe;
 }
 
+tbody tr:last-child td {
+  border-bottom: 0;
+}
 
-/* CÉLULAS */
+
+/* =========================================================
+   PRODUTO
+   ========================================================= */
 
 .product-code {
   display: inline-flex;
-  padding: 5px 7px;
+  padding: 5px 8px;
   color: #574ed0;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 750;
   background: #f1f0ff;
   border-radius: 6px;
@@ -393,30 +531,33 @@ tbody tr:hover td {
 .product-cell {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
 .product-avatar {
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
   display: grid;
   place-items: center;
   color: #fff;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   background: linear-gradient( 135deg, #686fe3, #574bcc );
-  border-radius: 8px;
+  border-radius: 9px;
+}
+
+.product-description strong,
+.product-description small {
+  display: block;
 }
 
 .product-description strong {
-  display: block;
   color: #343c4f;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .product-description small {
-  display: block;
   margin-top: 2px;
   color: #a0a6b2;
   font-size: 8px;
@@ -424,9 +565,9 @@ tbody tr:hover td {
 
 .stock-pill {
   display: inline-flex;
-  padding: 5px 8px;
+  padding: 5px 9px;
   color: #12865f;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 750;
   background: #eaf9f3;
   border: 1px solid #d5f1e5;
@@ -440,7 +581,9 @@ tbody tr:hover td {
 }
 
 
-/* AÇÕES */
+/* =========================================================
+   AÇÕES
+   ========================================================= */
 
 .table-actions-heading,
 .table-actions {
@@ -452,8 +595,8 @@ tbody tr:hover td {
 }
 
 .action-button {
-  min-height: 29px;
-  padding: 0 9px;
+  min-height: 30px;
+  padding: 0 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -471,22 +614,36 @@ tbody tr:hover td {
     margin-left: 5px;
   }
 
+  .action-button:hover {
+    transform: translateY(-1px);
+  }
+
 .edit-action {
   color: #5e57c8;
   border: 1px solid #dcdbf3;
 }
+
+  .edit-action:hover {
+    background: #f4f3ff;
+  }
 
 .delete-action {
   color: #c25c65;
   border: 1px solid #efdadd;
 }
 
+  .delete-action:hover {
+    background: #fff3f4;
+  }
 
-/* VAZIO */
+
+/* =========================================================
+   SEM RESULTADOS
+   ========================================================= */
 
 .empty-inventory {
-  min-height: 130px;
-  padding: 24px 18px;
+  min-height: 140px;
+  padding: 22px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -495,8 +652,8 @@ tbody tr:hover td {
 }
 
 .empty-illustration {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   margin-bottom: 9px;
   display: grid;
   place-items: center;
@@ -509,25 +666,65 @@ tbody tr:hover td {
 .empty-inventory h3 {
   margin: 0;
   color: #30384a;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .empty-inventory p {
-  max-width: 340px;
-  margin: 4px 0 0;
+  max-width: 390px;
+  margin: 5px 0 0;
   color: #989fad;
-  font-size: 9px;
-  line-height: 1.45;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
+  .empty-inventory p strong {
+    color: #6158d3;
+  }
 
-/* RESPONSIVO */
+.clear-filter-button {
+  min-height: 32px;
+  margin-top: 11px;
+  padding: 0 13px;
+  color: #5950ca;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+  background: #f1f0ff;
+  border: 1px solid #dedbfa;
+  border-radius: 8px;
+}
+
+  .clear-filter-button:hover {
+    background: #e9e7ff;
+  }
+
+
+/* =========================================================
+   RESPONSIVO
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .inventory-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .inventory-tools {
+    width: 100%;
+  }
+
+  .search-box {
+    flex: 1;
+    width: auto;
+  }
+}
 
 @media (max-width: 800px) {
   .overview-row {
     align-items: stretch;
     flex-direction: column;
-    gap: 14px;
+    gap: 15px;
   }
 
   .overview-divider {
@@ -538,10 +735,19 @@ tbody tr:hover td {
 
   .fields-grid {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "codigo"
+      "descricao"
+      "saldo";
+    row-gap: 14px;
   }
 
   .field-description {
     grid-column: auto;
+  }
+
+  .field-group small {
+    white-space: normal;
   }
 }
 
@@ -551,30 +757,26 @@ tbody tr:hover td {
   }
 
   .card-header,
-  .inventory-header {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
+  .inventory-header,
   .product-form {
     padding-left: 15px;
     padding-right: 15px;
   }
 
-  .form-footer {
-    flex-direction: column-reverse;
+  .inventory-tools {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .inventory-counter {
+    align-self: flex-start;
   }
 
   .button {
     width: 100%;
-  }
-
-  .button-primary {
-    min-width: 0;
-  }
-
-  .inventory-header {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }

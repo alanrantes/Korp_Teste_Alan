@@ -14,6 +14,8 @@ import { Atualizacao } from '../../services/atualizacao';
 export class Produtos implements OnInit {
   produtos: Produto[] = [];
 
+  termoBusca = '';
+
   produtoForm: Produto = {
     id: 0,
     codigo: '',
@@ -36,6 +38,19 @@ export class Produtos implements OnInit {
     this.atualizacao.estoqueAtualizado$.subscribe(() => {
       this.carregarProdutos();
     });
+  }
+
+  get produtosFiltrados(): Produto[] {
+    const termo = this.termoBusca.trim().toLowerCase();
+
+    if (!termo) {
+      return this.produtos;
+    }
+
+    return this.produtos.filter((produto) =>
+      produto.codigo.toLowerCase().includes(termo) ||
+      produto.descricao.toLowerCase().includes(termo)
+    );
   }
 
   carregarProdutos(): void {
@@ -115,5 +130,9 @@ export class Produtos implements OnInit {
     };
 
     this.editando = false;
+  }
+
+  limparBusca(): void {
+    this.termoBusca = '';
   }
 }
