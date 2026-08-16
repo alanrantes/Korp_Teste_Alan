@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Produto, ProdutoService } from '../../services/produto';
+import { Atualizacao } from '../../services/atualizacao';
 
 @Component({
   selector: 'app-produtos',
@@ -25,11 +26,16 @@ export class Produtos implements OnInit {
 
   constructor(
     private produtoService: ProdutoService,
+    private atualizacao: Atualizacao,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.carregarProdutos();
+
+    this.atualizacao.estoqueAtualizado$.subscribe(() => {
+      this.carregarProdutos();
+    });
   }
 
   carregarProdutos(): void {

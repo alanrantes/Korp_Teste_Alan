@@ -1,0 +1,135 @@
+<section class="notas-container">
+  <h2>Notas Fiscais</h2>
+
+  <div class="nova-nota">
+    <h3>Nova Nota Fiscal</h3>
+
+    <div class="item-form">
+      <div>
+        <label for="produto">Produto</label>
+
+        <select id="produto"
+                name="produto"
+                [(ngModel)]="produtoSelecionado">
+          <option [ngValue]="0">Selecione um produto</option>
+
+          <option *ngFor="let produto of produtos"
+                  [ngValue]="produto.id">
+            {{ produto.codigo }} - {{ produto.descricao }}
+            (Saldo: {{ produto.saldo }})
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label for="quantidade">Quantidade</label>
+
+        <input id="quantidade"
+               name="quantidade"
+               type="number"
+               min="1"
+               [(ngModel)]="quantidade" />
+      </div>
+
+      <button type="button"
+              (click)="adicionarItem()">
+        Adicionar Item
+      </button>
+    </div>
+
+    <div *ngIf="itens.length > 0" class="itens-nota">
+      <h4>Itens da Nota</h4>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Quantidade</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of itens; let i = index">
+            <td>
+              {{ obterDescricaoProduto(item.produtoId) }}
+            </td>
+
+            <td>
+              {{ item.quantidade }}
+            </td>
+
+            <td>
+              <button type="button"
+                      (click)="removerItem(i)">
+                Remover
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="button"
+              (click)="criarNota()">
+        Criar Nota Fiscal
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="mensagem">
+    {{ mensagem }}
+  </p>
+
+  <hr />
+
+  <h3>Notas cadastradas</h3>
+
+  <table *ngIf="notas.length > 0">
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Data</th>
+        <th>Status</th>
+        <th>Itens</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let nota of notas">
+        <td>{{ nota.numero }}</td>
+
+        <td>
+          {{ nota.dataCriacao | date:'dd/MM/yyyy HH:mm' }}
+        </td>
+
+        <td>
+          {{ nota.status }}
+        </td>
+
+        <td>
+          <div *ngFor="let item of nota.itens">
+            {{ obterDescricaoProduto(item.produtoId) }}
+            — Qtd: {{ item.quantidade }}
+          </div>
+        </td>
+
+        <td>
+          <button *ngIf="nota.status === 'Aberta'"
+                  type="button"
+                  (click)="fecharNota(nota.id)">
+            Fechar Nota
+          </button>
+
+          <span *ngIf="nota.status === 'Fechada'">
+            Fechada
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="notas.length === 0">
+    Nenhuma nota fiscal cadastrada.
+  </p>
+</section>

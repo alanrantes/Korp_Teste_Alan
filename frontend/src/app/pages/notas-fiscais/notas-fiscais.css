@@ -1,0 +1,73 @@
+.notas-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+h2,
+h3,
+h4 {
+  margin-bottom: 20px;
+}
+
+.nova-nota {
+  margin-bottom: 30px;
+}
+
+.item-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+  .item-form div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+select,
+input {
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.itens-nota {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f3f3f3;
+}
+
+hr {
+  margin: 30px 0;
+}
+
+@media (max-width: 700px) {
+  .item-form {
+    grid-template-columns: 1fr;
+  }
+}
