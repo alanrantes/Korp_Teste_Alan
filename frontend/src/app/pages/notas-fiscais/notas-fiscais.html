@@ -1,142 +1,314 @@
 <section class="notas-container">
-  <h2>Notas Fiscais</h2>
+  <div class="notas-grid">
+    <div class="creation-panel">
+      <div class="panel-header">
+        <div>
+          <span class="panel-kicker">EMISSÃO</span>
+          <h3>Nova Nota Fiscal</h3>
+          <p>
+            Selecione os produtos, informe as quantidades e monte a nota antes da impressão.
+          </p>
+        </div>
 
-  <div class="nova-nota">
-    <h3>Nova Nota Fiscal</h3>
-
-    <div class="item-form">
-      <div>
-        <label for="produto">Produto</label>
-
-        <select id="produto"
-                name="produto"
-                [(ngModel)]="produtoSelecionado">
-          <option [ngValue]="0">Selecione um produto</option>
-
-          <option *ngFor="let produto of produtos"
-                  [ngValue]="produto.id">
-            {{ produto.codigo }} - {{ produto.descricao }}
-            (Saldo: {{ produto.saldo }})
-          </option>
-        </select>
+        <div class="panel-icon">
+          NF
+        </div>
       </div>
 
-      <div>
-        <label for="quantidade">Quantidade</label>
+      <div class="item-form">
+        <div class="form-group produto-field">
+          <label for="produto">Produto</label>
 
-        <input id="quantidade"
-               name="quantidade"
-               type="number"
-               min="1"
-               [(ngModel)]="quantidade" />
+          <select id="produto"
+                  name="produto"
+                  [(ngModel)]="produtoSelecionado">
+            <option [ngValue]="0">
+              Selecione um produto
+            </option>
+
+            <option *ngFor="let produto of produtos"
+                    [ngValue]="produto.id">
+              {{ produto.codigo }} - {{ produto.descricao }}
+              (Saldo: {{ produto.saldo }})
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group quantidade-field">
+          <label for="quantidade">Quantidade</label>
+
+          <input id="quantidade"
+                 name="quantidade"
+                 type="number"
+                 min="1"
+                 [(ngModel)]="quantidade" />
+        </div>
+
+        <button type="button"
+                class="btn btn-secondary-action"
+                (click)="adicionarItem()">
+          <span>+</span>
+          Adicionar item
+        </button>
       </div>
 
-      <button type="button"
-              (click)="adicionarItem()">
-        Adicionar Item
-      </button>
+      <div *ngIf="itens.length > 0"
+           class="draft-panel">
+        <div class="draft-header">
+          <div>
+            <span class="panel-kicker">RASCUNHO</span>
+            <h4>Itens da nota</h4>
+          </div>
+
+          <span class="item-count">
+            {{ itens.length }}
+            {{ itens.length === 1 ? 'item' : 'itens' }}
+          </span>
+        </div>
+
+        <div class="draft-items">
+          <div *ngFor="let item of itens; let i = index"
+               class="draft-item">
+            <div class="draft-product">
+              <div class="draft-icon">
+                {{ obterDescricaoProduto(item.produtoId).charAt(0) }}
+              </div>
+
+              <div>
+                <strong>
+                  {{ obterDescricaoProduto(item.produtoId) }}
+                </strong>
+
+                <small>
+                  Quantidade selecionada
+                </small>
+              </div>
+            </div>
+
+            <div class="draft-quantity">
+              {{ item.quantidade }} un.
+            </div>
+
+            <button type="button"
+                    class="remove-button"
+                    (click)="removerItem(i)"
+                    title="Remover item">
+              ×
+            </button>
+          </div>
+        </div>
+
+        <div class="draft-footer">
+          <div class="draft-summary">
+            <span>Total de itens</span>
+            <strong>
+              {{ itens.length }}
+            </strong>
+          </div>
+
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="criarNota()">
+            <span>+</span>
+            Criar Nota Fiscal
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="mensagem"
+           class="feedback-message">
+        <span class="feedback-icon">i</span>
+        {{ mensagem }}
+      </div>
     </div>
 
-    <div *ngIf="itens.length > 0" class="itens-nota">
-      <h4>Itens da Nota</h4>
+    <div class="stats-panel">
+      <span class="panel-kicker">FATURAMENTO</span>
+      <h3>Resumo das notas</h3>
 
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">
+            Total
+          </span>
+
+          <strong class="stat-value">
+            {{ notas.length }}
+          </strong>
+
+          <small>
+            notas cadastradas
+          </small>
+        </div>
+
+        <div class="stat-card stat-open">
+          <span class="stat-label">
+            Abertas
+          </span>
+
+          <strong class="stat-value">
+            {{ notas.filter(n => n.status === 'Aberta').length }}
+          </strong>
+
+          <small>
+            aguardando impressão
+          </small>
+        </div>
+
+        <div class="stat-card stat-closed">
+          <span class="stat-label">
+            Fechadas
+          </span>
+
+          <strong class="stat-value">
+            {{ notas.filter(n => n.status === 'Fechada').length }}
+          </strong>
+
+          <small>
+            processadas
+          </small>
+        </div>
+      </div>
+
+      <div class="integration-status">
+        <div class="integration-line">
+          <span class="integration-dot"></span>
+
+          <div>
+            <strong>Faturamento conectado</strong>
+            <p>
+              As notas são processadas diretamente pelo microsserviço de faturamento.
+            </p>
+          </div>
+        </div>
+
+        <div class="integration-line">
+          <span class="integration-dot integration-purple"></span>
+
+          <div>
+            <strong>Baixa automática</strong>
+            <p>
+              Ao imprimir, o estoque é atualizado pelo serviço de estoque.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="history-panel">
+    <div class="history-header">
+      <div>
+        <span class="panel-kicker">HISTÓRICO</span>
+        <h3>Notas cadastradas</h3>
+        <p>
+          Acompanhe o status e os itens vinculados a cada documento.
+        </p>
+      </div>
+
+      <span class="record-count">
+        {{ notas.length }}
+        {{ notas.length === 1 ? 'registro' : 'registros' }}
+      </span>
+    </div>
+
+    <div *ngIf="notas.length > 0"
+         class="table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Ação</th>
+            <th>Nota</th>
+            <th>Emissão</th>
+            <th>Status</th>
+            <th>Itens</th>
+            <th class="actions-column">Ação</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr *ngFor="let item of itens; let i = index">
+          <tr *ngFor="let nota of notas">
             <td>
-              {{ obterDescricaoProduto(item.produtoId) }}
+              <div class="invoice-number">
+                <span>NF</span>
+                #{{ nota.numero }}
+              </div>
             </td>
 
             <td>
-              {{ item.quantidade }}
+              <div class="date-info">
+                <strong>
+                  {{ nota.dataCriacao | date:'dd/MM/yyyy' }}
+                </strong>
+
+                <small>
+                  {{ nota.dataCriacao | date:'HH:mm' }}
+                </small>
+              </div>
             </td>
 
             <td>
-              <button type="button"
-                      (click)="removerItem(i)">
-                Remover
+              <span class="status-badge"
+                    [class.status-open]="nota.status === 'Aberta'"
+                    [class.status-closed]="nota.status === 'Fechada'">
+                <span class="badge-dot"></span>
+                {{ nota.status }}
+              </span>
+            </td>
+
+            <td>
+              <div class="invoice-items">
+                <div *ngFor="let item of nota.itens"
+                     class="invoice-item">
+                  <span>
+                    {{ obterDescricaoProduto(item.produtoId) }}
+                  </span>
+
+                  <strong>
+                    {{ item.quantidade }} un.
+                  </strong>
+                </div>
+              </div>
+            </td>
+
+            <td class="actions-column">
+              <button *ngIf="nota.status === 'Aberta'"
+                      type="button"
+                      class="print-button"
+                      (click)="fecharNota(nota.id)"
+                      [disabled]="notaProcessandoId === nota.id">
+                <span class="print-icon">
+                  {{ notaProcessandoId === nota.id ? '•••' : '▣' }}
+                </span>
+
+                {{
+                  notaProcessandoId === nota.id
+                    ? 'Processando...'
+                    : 'Imprimir Nota'
+                }}
               </button>
+
+              <div *ngIf="nota.status === 'Fechada'"
+                   class="closed-label">
+                <span>✓</span>
+                Processada
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
 
-      <button type="button"
-              (click)="criarNota()">
-        Criar Nota Fiscal
-      </button>
+    <div *ngIf="notas.length === 0"
+         class="empty-state">
+      <div class="empty-icon">
+        NF
+      </div>
+
+      <h4>Nenhuma nota fiscal cadastrada</h4>
+
+      <p>
+        Crie sua primeira nota adicionando produtos no formulário acima.
+      </p>
     </div>
   </div>
-
-  <p *ngIf="mensagem">
-    {{ mensagem }}
-  </p>
-
-  <hr />
-
-  <h3>Notas cadastradas</h3>
-
-  <table *ngIf="notas.length > 0">
-    <thead>
-      <tr>
-        <th>Número</th>
-        <th>Data</th>
-        <th>Status</th>
-        <th>Itens</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let nota of notas">
-        <td>
-          {{ nota.numero }}
-        </td>
-
-        <td>
-          {{ nota.dataCriacao | date:'dd/MM/yyyy HH:mm' }}
-        </td>
-
-        <td>
-          {{ nota.status }}
-        </td>
-
-        <td>
-          <div *ngFor="let item of nota.itens">
-            {{ obterDescricaoProduto(item.produtoId) }}
-            — Qtd: {{ item.quantidade }}
-          </div>
-        </td>
-
-        <td>
-          <button *ngIf="nota.status === 'Aberta'"
-                  type="button"
-                  (click)="fecharNota(nota.id)"
-                  [disabled]="notaProcessandoId === nota.id">
-            {{
- notaProcessandoId === nota.id
-              ? 'Processando...'
-              : 'Imprimir Nota'
-            }}
-          </button>
-
-          <span *ngIf="nota.status === 'Fechada'">
-            Fechada
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p *ngIf="notas.length === 0">
-    Nenhuma nota fiscal cadastrada.
-  </p>
 </section>

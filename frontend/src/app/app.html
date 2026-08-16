@@ -1,5 +1,293 @@
-<app-produtos></app-produtos>
+<div class="app-shell">
 
-<hr />
+  <header class="topbar">
 
-<app-notas-fiscais></app-notas-fiscais>
+    <button type="button"
+            class="brand"
+            (click)="alterarSecao('inicio')">
+      <div class="brand-icon">K</div>
+
+      <div class="brand-text">
+        <span class="brand-name">Korp</span>
+        <span class="brand-subtitle">Gestão Integrada</span>
+      </div>
+    </button>
+
+    <nav class="main-nav">
+
+      <button type="button"
+              class="nav-item"
+              [class.active]="secaoAtual === 'inicio'"
+              (click)="alterarSecao('inicio')">
+        <span class="nav-icon">⌂</span>
+        Visão Geral
+      </button>
+
+      <button type="button"
+              class="nav-item"
+              [class.active]="secaoAtual === 'produtos'"
+              (click)="alterarSecao('produtos')">
+        <span class="nav-icon">▦</span>
+        Produtos
+      </button>
+
+      <button type="button"
+              class="nav-item"
+              [class.active]="secaoAtual === 'faturamento'"
+              (click)="alterarSecao('faturamento')">
+        <span class="nav-icon">▤</span>
+        Notas Fiscais
+      </button>
+
+    </nav>
+
+    <div class="system-status">
+      <span class="status-dot"></span>
+      Sistema online
+    </div>
+
+  </header>
+
+
+  <!-- VISÃO GERAL -->
+
+  <main *ngIf="secaoAtual === 'inicio'"
+        class="home-content">
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <span class="eyebrow">
+          PAINEL OPERACIONAL
+        </span>
+
+        <h1>
+          <span class="hero-title-main">
+            Controle de estoque
+          </span>
+
+          <span class="hero-title-accent">
+            e faturamento
+          </span>
+        </h1>
+
+        <p>
+          Gerencie produtos, acompanhe saldos e processe notas fiscais
+          através de microsserviços integrados.
+        </p>
+
+        <div class="hero-actions">
+
+          <button type="button"
+                  class="hero-primary"
+                  (click)="alterarSecao('produtos')">
+            Gerenciar produtos
+            <span>→</span>
+          </button>
+
+          <button type="button"
+                  class="hero-secondary"
+                  (click)="alterarSecao('faturamento')">
+            Acessar faturamento
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="hero-visual">
+
+        <div class="visual-card visual-card-back"></div>
+
+        <div class="visual-card visual-card-main">
+
+          <div class="visual-header">
+            <div class="visual-logo">K</div>
+            <span>Fluxo integrado</span>
+          </div>
+
+          <div class="flow">
+
+            <div class="flow-item">
+              <span>01</span>
+              Produto
+            </div>
+
+            <div class="flow-line"></div>
+
+            <div class="flow-item">
+              <span>02</span>
+              Nota Fiscal
+            </div>
+
+            <div class="flow-line"></div>
+
+            <div class="flow-item">
+              <span>03</span>
+              Baixa
+            </div>
+
+          </div>
+
+          <div class="visual-footer">
+            <span class="status-dot"></span>
+            Microsserviços conectados
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="overview">
+
+      <div class="overview-heading">
+        <span class="eyebrow">MÓDULOS</span>
+
+        <h2>
+          Tudo o que você precisa em um só lugar
+        </h2>
+
+        <p>
+          Escolha uma área para gerenciar o estoque ou acompanhar o faturamento.
+        </p>
+      </div>
+
+
+      <div class="overview-grid">
+
+        <button type="button"
+                class="overview-card"
+                (click)="alterarSecao('produtos')">
+          <div class="overview-number">01</div>
+
+          <div class="overview-content">
+            <span>ESTOQUE</span>
+
+            <h3>Gestão de Produtos</h3>
+
+            <p>
+              Cadastro, edição, exclusão e acompanhamento de saldo.
+            </p>
+          </div>
+
+          <div class="overview-arrow">→</div>
+        </button>
+
+
+        <button type="button"
+                class="overview-card"
+                (click)="alterarSecao('faturamento')">
+          <div class="overview-number">02</div>
+
+          <div class="overview-content">
+            <span>FATURAMENTO</span>
+
+            <h3>Notas Fiscais</h3>
+
+            <p>
+              Emissão, impressão e baixa automática de estoque.
+            </p>
+          </div>
+
+          <div class="overview-arrow">→</div>
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- PRODUTOS -->
+
+  <main *ngIf="secaoAtual === 'produtos'"
+        class="page-content">
+
+    <section class="page-heading">
+
+      <button type="button"
+              class="back-button"
+              (click)="alterarSecao('inicio')">
+        ←
+      </button>
+
+      <div class="section-number">01</div>
+
+      <div>
+        <span class="section-label">ESTOQUE</span>
+
+        <h1>Gestão de Produtos</h1>
+
+        <p>
+          Cadastre, edite e acompanhe o saldo disponível dos seus produtos.
+        </p>
+      </div>
+
+    </section>
+
+    <div class="module-card">
+      <app-produtos></app-produtos>
+    </div>
+
+  </main>
+
+
+  <!-- FATURAMENTO -->
+
+  <main *ngIf="secaoAtual === 'faturamento'"
+        class="page-content">
+
+    <section class="page-heading">
+
+      <button type="button"
+              class="back-button"
+              (click)="alterarSecao('inicio')">
+        ←
+      </button>
+
+      <div class="section-number">02</div>
+
+      <div>
+        <span class="section-label">FATURAMENTO</span>
+
+        <h1>Notas Fiscais</h1>
+
+        <p>
+          Monte notas com múltiplos itens e processe a baixa automática do estoque.
+        </p>
+      </div>
+
+    </section>
+
+    <div class="module-card">
+      <app-notas-fiscais></app-notas-fiscais>
+    </div>
+
+  </main>
+
+
+  <footer class="footer">
+
+    <div>
+      <strong>Korp</strong>
+      <span>•</span>
+      Gestão Integrada
+    </div>
+
+    <div class="footer-tech">
+      Angular
+      <span>+</span>
+      ASP.NET Core
+      <span>+</span>
+      SQL Server
+    </div>
+
+  </footer>
+
+</div>

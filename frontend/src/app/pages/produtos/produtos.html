@@ -1,83 +1,336 @@
-<section class="produtos-container">
-  <h2>Cadastro de Produtos</h2>
+<section class="products-page">
 
-  <form (ngSubmit)="salvar()">
-    <div>
-      <label for="codigo">Código</label>
-      <input id="codigo"
-             name="codigo"
-             type="text"
-             [(ngModel)]="produtoForm.codigo"
-             required />
+  <!-- RESUMO SUPERIOR -->
+
+  <div class="overview-row">
+
+    <div class="overview-item">
+      <div class="overview-icon">
+        ▦
+      </div>
+
+      <div class="overview-data">
+        <span class="overview-label">PRODUTOS</span>
+
+        <strong>
+          {{ produtos.length }}
+        </strong>
+
+        <small>
+          {{
+ produtos.length === 1
+            ? 'produto cadastrado'
+            : 'produtos cadastrados'
+          }}
+        </small>
+      </div>
     </div>
 
-    <div>
-      <label for="descricao">Descrição</label>
-      <input id="descricao"
-             name="descricao"
-             type="text"
-             [(ngModel)]="produtoForm.descricao"
-             required />
+
+    <div class="overview-divider"></div>
+
+
+    <div class="overview-item">
+      <div class="overview-icon overview-icon-success">
+        ✓
+      </div>
+
+      <div class="overview-data">
+        <span class="overview-label">STATUS</span>
+
+        <strong class="status-title">
+          Sincronizado
+        </strong>
+
+        <small>
+          Dados persistidos no serviço de estoque
+        </small>
+      </div>
     </div>
 
-    <div>
-      <label for="saldo">Saldo</label>
-      <input id="saldo"
-             name="saldo"
-             type="number"
-             [(ngModel)]="produtoForm.saldo"
-             min="0"
-             required />
+  </div>
+
+
+  <!-- CADASTRO -->
+
+  <div class="form-card">
+
+    <div class="card-header">
+
+      <div>
+        <span class="section-kicker">
+          CADASTRO
+        </span>
+
+        <h2>
+          {{ editando ? 'Editar produto' : 'Novo produto' }}
+        </h2>
+
+        <p>
+          Informe os dados do produto para atualizar o catálogo de estoque.
+        </p>
+      </div>
+
+
+      <div class="editing-badge"
+           *ngIf="editando">
+        Modo edição
+      </div>
+
     </div>
 
-    <button type="submit">
-      {{ editando ? 'Atualizar' : 'Cadastrar' }}
-    </button>
 
-    <button *ngIf="editando"
-            type="button"
-            (click)="limparFormulario()">
-      Cancelar
-    </button>
-  </form>
+    <form class="product-form"
+          (ngSubmit)="salvar()">
 
-  <p *ngIf="mensagem">
-    {{ mensagem }}
-  </p>
+      <div class="fields-grid">
 
-  <hr />
+        <div class="field-group field-code">
 
-  <h3>Produtos cadastrados</h3>
+          <label for="codigo">
+            Código
+          </label>
 
-  <table *ngIf="produtos.length > 0">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Descrição</th>
-        <th>Saldo</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
+          <input id="codigo"
+                 name="codigo"
+                 type="text"
+                 [(ngModel)]="produtoForm.codigo"
+                 placeholder="Ex.: PROD001"
+                 required />
 
-    <tbody>
-      <tr *ngFor="let produto of produtos">
-        <td>{{ produto.codigo }}</td>
-        <td>{{ produto.descricao }}</td>
-        <td>{{ produto.saldo }}</td>
-        <td>
-          <button type="button" (click)="editar(produto)">
-            Editar
-          </button>
+          <small>
+            Identificador único do produto.
+          </small>
 
-          <button type="button" (click)="excluir(produto.id)">
-            Excluir
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
 
-  <p *ngIf="produtos.length === 0">
-    Nenhum produto cadastrado.
-  </p>
+
+        <div class="field-group field-stock">
+
+          <label for="saldo">
+            Saldo inicial
+          </label>
+
+          <input id="saldo"
+                 name="saldo"
+                 type="number"
+                 [(ngModel)]="produtoForm.saldo"
+                 min="0"
+                 placeholder="0"
+                 required />
+
+          <small>
+            Quantidade disponível em estoque.
+          </small>
+
+        </div>
+
+
+        <div class="field-group field-description">
+
+          <label for="descricao">
+            Descrição
+          </label>
+
+          <input id="descricao"
+                 name="descricao"
+                 type="text"
+                 [(ngModel)]="produtoForm.descricao"
+                 placeholder="Ex.: Teclado Mecânico RGB"
+                 required />
+
+          <small>
+            Nome ou descrição comercial do item.
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-footer">
+
+        <button type="button"
+                class="button button-secondary"
+                *ngIf="editando"
+                (click)="limparFormulario()">
+          Cancelar edição
+        </button>
+
+
+        <button type="submit"
+                class="button button-primary">
+          <span>
+            {{ editando ? '✓' : '+' }}
+          </span>
+
+          {{
+ editando
+            ? 'Salvar alterações'
+            : 'Cadastrar produto'
+          }}
+        </button>
+
+      </div>
+
+    </form>
+
+
+    <div *ngIf="mensagem"
+         class="message-box">
+      <span class="message-icon">
+        i
+      </span>
+
+      <span>
+        {{ mensagem }}
+      </span>
+    </div>
+
+  </div>
+
+
+  <!-- INVENTÁRIO -->
+
+  <div class="inventory-card">
+
+    <div class="inventory-header">
+
+      <div>
+        <span class="section-kicker">
+          INVENTÁRIO
+        </span>
+
+        <h2>
+          Produtos cadastrados
+        </h2>
+
+        <p>
+          Consulte, edite ou remova os produtos disponíveis.
+        </p>
+      </div>
+
+
+      <div class="inventory-counter">
+        {{ produtos.length }}
+        {{ produtos.length === 1 ? 'registro' : 'registros' }}
+      </div>
+
+    </div>
+
+
+    <div class="inventory-table-wrapper"
+         *ngIf="produtos.length > 0">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Código</th>
+            <th>Produto</th>
+            <th>Saldo</th>
+            <th class="table-actions-heading">
+              Ações
+            </th>
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          <tr *ngFor="let produto of produtos">
+
+            <td>
+
+              <span class="product-code">
+                {{ produto.codigo }}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <div class="product-cell">
+
+                <div class="product-avatar">
+                  {{ produto.descricao.charAt(0).toUpperCase() }}
+                </div>
+
+                <div class="product-description">
+
+                  <strong>
+                    {{ produto.descricao }}
+                  </strong>
+
+                  <small>
+                    ID #{{ produto.id }}
+                  </small>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+
+              <span class="stock-pill"
+                    [class.stock-pill-low]="produto.saldo <= 5">
+                {{ produto.saldo }} un.
+              </span>
+
+            </td>
+
+
+            <td class="table-actions">
+
+              <button type="button"
+                      class="action-button edit-action"
+                      (click)="editar(produto)">
+                <span>✎</span>
+                Editar
+              </button>
+
+
+              <button type="button"
+                      class="action-button delete-action"
+                      (click)="excluir(produto.id)">
+                <span>×</span>
+                Excluir
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div *ngIf="produtos.length === 0"
+         class="empty-inventory">
+
+      <div class="empty-illustration">
+        ▦
+      </div>
+
+      <h3>
+        Nenhum produto cadastrado
+      </h3>
+
+      <p>
+        Utilize o formulário acima para adicionar o primeiro produto ao estoque.
+      </p>
+
+    </div>
+
+  </div>
+
 </section>
