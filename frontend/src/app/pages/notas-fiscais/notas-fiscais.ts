@@ -34,6 +34,7 @@ export class NotasFiscais implements OnInit {
   }[] = [];
 
   mensagem = '';
+  notaProcessandoId: number | null = null;
 
   constructor(
     private notaFiscalService: NotaFiscalService,
@@ -131,9 +132,14 @@ export class NotasFiscais implements OnInit {
   }
 
   fecharNota(id: number): void {
+    this.notaProcessandoId = id;
+    this.mensagem = 'Processando impressão da nota fiscal...';
+    this.cdr.markForCheck();
+
     this.notaFiscalService.fechar(id).subscribe({
       next: () => {
-        this.mensagem = 'Nota fiscal fechada com sucesso.';
+        this.mensagem = 'Nota fiscal impressa e fechada com sucesso.';
+        this.notaProcessandoId = null;
 
         this.carregarNotas();
         this.carregarProdutos();
@@ -143,10 +149,12 @@ export class NotasFiscais implements OnInit {
         this.cdr.markForCheck();
       },
       error: (erro) => {
+        this.notaProcessandoId = null;
+
         this.mensagem =
           typeof erro.error === 'string'
             ? erro.error
-            : 'Erro ao fechar nota fiscal.';
+            : 'Erro ao imprimir a nota fiscal.';
 
         this.cdr.markForCheck();
       },

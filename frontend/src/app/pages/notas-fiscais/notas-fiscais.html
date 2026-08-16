@@ -97,7 +97,9 @@
 
     <tbody>
       <tr *ngFor="let nota of notas">
-        <td>{{ nota.numero }}</td>
+        <td>
+          {{ nota.numero }}
+        </td>
 
         <td>
           {{ nota.dataCriacao | date:'dd/MM/yyyy HH:mm' }}
@@ -117,8 +119,13 @@
         <td>
           <button *ngIf="nota.status === 'Aberta'"
                   type="button"
-                  (click)="fecharNota(nota.id)">
-            Fechar Nota
+                  (click)="fecharNota(nota.id)"
+                  [disabled]="notaProcessandoId === nota.id">
+            {{
+ notaProcessandoId === nota.id
+              ? 'Processando...'
+              : 'Imprimir Nota'
+            }}
           </button>
 
           <span *ngIf="nota.status === 'Fechada'">
