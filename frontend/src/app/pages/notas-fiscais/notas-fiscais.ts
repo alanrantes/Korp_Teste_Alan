@@ -28,6 +28,8 @@ export class NotasFiscais implements OnInit {
   produtoSelecionado = 0;
   quantidade = 1;
 
+  buscaNota = '';
+
   itens: {
     produtoId: number;
     quantidade: number;
@@ -35,6 +37,9 @@ export class NotasFiscais implements OnInit {
 
   mensagem = '';
   notaProcessandoId: number | null = null;
+
+  // Controla a exibição do modal de rascunho
+  modalRascunhoAberto = false;
 
   constructor(
     private notaFiscalService: NotaFiscalService,
@@ -46,6 +51,44 @@ export class NotasFiscais implements OnInit {
   ngOnInit(): void {
     this.carregarNotas();
     this.carregarProdutos();
+  }
+
+  get notasFiltradas(): NotaFiscal[] {
+    const termo = this.buscaNota
+      .trim()
+      .toLowerCase();
+
+    if (!termo) {
+      return this.notas;
+    }
+
+    return this.notas.filter((nota) => {
+      const numeroNota = String(nota.numero).toLowerCase();
+
+      const encontrouNota =
+        numeroNota.includes(termo) ||
+        `#${numeroNota}`.includes(termo);
+
+      const encontrouProduto = nota.itens.some((item) => {
+        const produto = this.produtos.find(
+          (p) => p.id === item.produtoId
+        );
+
+        if (!produto) {
+          return String(item.produtoId).includes(termo);
+        }
+
+        return (
+          produto.codigo.toLowerCase().includes(termo) ||
+          produto.descricao.toLowerCase().includes(termo) ||
+          `${produto.codigo} ${produto.descricao}`
+            .toLowerCase()
+            .includes(termo)
+        );
+      });
+
+      return encontrouNota || encontrouProduto;
+    });
   }
 
   carregarNotas(): void {
@@ -76,7 +119,10 @@ export class NotasFiscais implements OnInit {
 
   adicionarItem(): void {
     if (this.produtoSelecionado <= 0 || this.quantidade <= 0) {
-      this.mensagem = 'Selecione um produto e informe uma quantidade válida.';
+      this.mensagem =
+        'Selecione um produto e informe uma quantidade válida.';
+
+      this.cdr.markForCheck();
       return;
     }
 
@@ -88,15 +134,44 @@ export class NotasFiscais implements OnInit {
     this.produtoSelecionado = 0;
     this.quantidade = 1;
     this.mensagem = '';
+
+    // Abre o modal automaticamente após adicionar o item
+    this.abrirRascunho();
+
+    this.cdr.markForCheck();
   }
 
   removerItem(index: number): void {
     this.itens.splice(index, 1);
+
+    // Se remover o último item, fecha o modal
+    if (this.itens.length === 0) {
+      this.fecharRascunho();
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  abrirRascunho(): void {
+    if (this.itens.length === 0) {
+      return;
+    }
+
+    this.modalRascunhoAberto = true;
+    this.cdr.markForCheck();
+  }
+
+  fecharRascunho(): void {
+    this.modalRascunhoAberto = false;
+    this.cdr.markForCheck();
   }
 
   criarNota(): void {
     if (this.itens.length === 0) {
-      this.mensagem = 'Adicione pelo menos um item à nota fiscal.';
+      this.mensagem =
+        'Adicione pelo menos um item à nota fiscal.';
+
+      this.fecharRascunho();
       return;
     }
 
@@ -115,9 +190,16 @@ export class NotasFiscais implements OnInit {
 
     this.notaFiscalService.criar(nota).subscribe({
       next: () => {
-        this.mensagem = 'Nota fiscal criada com sucesso.';
+        this.mensagem =
+          'Nota fiscal criada com sucesso.';
+
         this.itens = [];
+
+        // Fecha o modal depois da criação
+        this.fecharRascunho();
+
         this.carregarNotas();
+
         this.cdr.markForCheck();
       },
       error: (erro) => {
@@ -133,12 +215,17 @@ export class NotasFiscais implements OnInit {
 
   fecharNota(id: number): void {
     this.notaProcessandoId = id;
-    this.mensagem = 'Processando impressão da nota fiscal...';
+
+    this.mensagem =
+      'Processando impressão da nota fiscal...';
+
     this.cdr.markForCheck();
 
     this.notaFiscalService.fechar(id).subscribe({
       next: () => {
-        this.mensagem = 'Nota fiscal impressa e fechada com sucesso.';
+        this.mensagem =
+          'Nota fiscal impressa e fechada com sucesso.';
+
         this.notaProcessandoId = null;
 
         this.carregarNotas();
@@ -159,6 +246,10 @@ export class NotasFiscais implements OnInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  limparBuscaNotas(): void {
+    this.buscaNota = '';
   }
 
   obterDescricaoProduto(produtoId: number): string {

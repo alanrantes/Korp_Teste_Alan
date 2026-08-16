@@ -217,31 +217,10 @@
 
 
   <!-- FATURAMENTO -->
+  <!-- FATURAMENTO -->
 
   <main *ngIf="secaoAtual === 'faturamento'"
-        class="page-content">
-
-    <section class="page-heading">
-
-      <button type="button"
-              class="back-button"
-              (click)="alterarSecao('inicio')">
-        ←
-      </button>
-
-      <div class="section-number">02</div>
-
-      <div>
-        <span class="section-label">FATURAMENTO</span>
-
-        <h1>Notas Fiscais</h1>
-
-        <p>
-          Monte notas com múltiplos itens e processe a baixa automática do estoque.
-        </p>
-      </div>
-
-    </section>
+        class="page-content invoices-page-content">
 
     <div class="module-card">
       <app-notas-fiscais></app-notas-fiscais>
