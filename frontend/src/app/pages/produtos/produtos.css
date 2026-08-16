@@ -17,10 +17,7 @@
   gap: 16px;
 }
 
-
-/* =========================================================
-   RESUMO
-   ========================================================= */
+/* RESUMO */
 
 .overview-row {
   width: 100%;
@@ -28,16 +25,21 @@
   padding: 15px 19px;
   display: flex;
   align-items: center;
-  background: linear-gradient( 120deg, #fafaff, #f6f7ff );
+  background: linear-gradient(120deg, #fafaff, #f6f7ff);
   border: 1px solid #e7e8f1;
   border-radius: 15px;
+}
+
+.overview-item,
+.product-cell,
+.inventory-tools {
+  display: flex;
+  align-items: center;
 }
 
 .overview-item {
   flex: 1;
   min-width: 0;
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
 
@@ -49,12 +51,19 @@
   background: #e1e3eb;
 }
 
+.overview-icon,
+.message-icon,
+.product-avatar,
+.empty-illustration,
+.clear-search {
+  display: grid;
+  place-items: center;
+}
+
 .overview-icon {
   width: 43px;
   height: 43px;
   flex: 0 0 43px;
-  display: grid;
-  place-items: center;
   color: #6157df;
   font-size: 16px;
   font-weight: 800;
@@ -75,13 +84,13 @@
   color: #7067df;
   font-size: 9px;
   font-weight: 850;
-  letter-spacing: 0.13em;
+  letter-spacing: .13em;
 }
 
 .overview-data strong {
   display: inline-block;
   margin-right: 7px;
-  color: #20283a;
+  color: var(--color-text);
   font-size: 21px;
   font-weight: 800;
 }
@@ -95,30 +104,26 @@
   font-size: 10px;
 }
 
-
-/* =========================================================
-   CARDS
-   ========================================================= */
+/* CARDS */
 
 .form-card,
 .inventory-card {
   width: 100%;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid #e6e8ee;
   border-radius: 16px;
 }
 
-
-/* =========================================================
-   CABEÇALHO DO CADASTRO
-   ========================================================= */
+.card-header,
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+}
 
 .card-header {
   padding: 16px 22px 10px;
-  display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 18px;
 }
 
@@ -128,23 +133,29 @@
   color: #675ddd;
   font-size: 9px;
   font-weight: 850;
-  letter-spacing: 0.14em;
+  letter-spacing: .14em;
 }
 
 .card-header h2,
 .inventory-header h2 {
   margin: 0;
-  color: #202638;
+  color: var(--color-text);
   font-size: 19px;
-  letter-spacing: -0.02em;
+  letter-spacing: -.02em;
 }
 
 .card-header p,
 .inventory-header p {
   margin: 4px 0 0;
-  color: #8d95a5;
+  color: var(--color-muted);
   font-size: 11px;
   line-height: 1.45;
+}
+
+.editing-badge,
+.inventory-counter,
+.stock-pill {
+  border-radius: var(--radius-pill);
 }
 
 .editing-badge {
@@ -154,14 +165,9 @@
   font-weight: 750;
   background: #f1f0ff;
   border: 1px solid #e0defa;
-  border-radius: 999px;
 }
 
-
-/* =========================================================
-   FORMULÁRIO
-   Código | Descrição | Saldo
-   ========================================================= */
+/* FORMULÁRIO */
 
 .product-form {
   width: 100%;
@@ -171,9 +177,8 @@
 .fields-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(180px, 0.85fr) minmax(300px, 1.65fr) minmax(150px, 0.6fr);
-  grid-template-areas:
-    "codigo descricao saldo";
+  grid-template-columns: minmax(180px, .85fr) minmax(300px, 1.65fr) minmax(150px, .6fr);
+  grid-template-areas: "codigo descricao saldo";
   column-gap: 22px;
   align-items: start;
 }
@@ -204,21 +209,25 @@
     font-weight: 700;
   }
 
-  .field-group input {
-    display: block;
+  .field-group input,
+  .search-box input {
     width: 100%;
+    font-family: inherit;
+    outline: none;
+    background: var(--color-surface-soft);
+    border: 1px solid #dce0e7;
+    transition: .18s ease;
+  }
+
+  .field-group input {
     max-width: 100%;
     height: 40px;
     margin: 0;
     padding: 0 13px;
+    display: block;
     color: #252c3e;
-    font-family: inherit;
     font-size: 12px;
-    outline: none;
-    background: #fafbfc;
-    border: 1px solid #dce0e7;
-    border-radius: 9px;
-    transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    border-radius: var(--radius-md);
   }
 
     .field-group input::placeholder {
@@ -229,24 +238,22 @@
       border-color: #cbd0db;
     }
 
-    .field-group input:focus {
+    .field-group input:focus,
+    .search-box input:focus {
       background: #fff;
       border-color: #766de5;
-      box-shadow: 0 0 0 3px rgba(100, 91, 221, 0.08);
+      box-shadow: 0 0 0 3px rgba(100, 91, 221, .08);
     }
 
   .field-group small {
     display: block;
     margin-top: 4px;
-    color: #a0a6b2;
+    color: var(--color-muted-light);
     font-size: 8px;
     white-space: nowrap;
   }
 
-
-/* =========================================================
-   BOTÃO
-   ========================================================= */
+/* AÇÕES DO FORMULÁRIO */
 
 .form-footer {
   width: 100%;
@@ -258,22 +265,27 @@
   border-top: 1px solid #eef0f3;
 }
 
-.button {
-  min-height: 37px;
-  padding: 0 17px;
+.button,
+.action-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
   font-family: inherit;
-  font-size: 11px;
-  font-weight: 750;
   cursor: pointer;
-  border-radius: 9px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-  .button:hover {
+.button {
+  min-height: 37px;
+  padding: 0 17px;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 750;
+  border-radius: var(--radius-md);
+  transition: .15s ease;
+}
+
+  .button:hover,
+  .action-button:hover {
     transform: translateY(-1px);
   }
 
@@ -282,13 +294,13 @@
   min-width: 0;
   max-width: none;
   color: #fff;
-  background: linear-gradient( 135deg, #5147dc, #6b58e4 );
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   border: 0;
-  box-shadow: 0 7px 16px rgba(81, 71, 220, 0.18);
+  box-shadow: 0 7px 16px rgba(81, 71, 220, .18);
 }
 
   .button-primary:hover {
-    box-shadow: 0 10px 22px rgba(81, 71, 220, 0.24);
+    box-shadow: 0 10px 22px rgba(81, 71, 220, .24);
   }
 
 .button-secondary {
@@ -298,10 +310,7 @@
   border: 1px solid #e4e6ea;
 }
 
-
-/* =========================================================
-   FEEDBACK
-   ========================================================= */
+/* FEEDBACK */
 
 .message-box {
   margin: 0 22px 14px;
@@ -309,20 +318,18 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  color: #555e71;
+  color: var(--color-text-secondary);
   font-size: 10px;
   font-weight: 600;
-  background: #f5f5ff;
+  background: var(--color-primary-soft-2);
   border: 1px solid #e2e0ff;
-  border-radius: 9px;
+  border-radius: var(--radius-md);
 }
 
 .message-icon {
   width: 18px;
   height: 18px;
   flex: 0 0 18px;
-  display: grid;
-  place-items: center;
   color: #fff;
   font-size: 9px;
   font-weight: 800;
@@ -330,18 +337,13 @@
   border-radius: 50%;
 }
 
-
-/* =========================================================
-   INVENTÁRIO
-   ========================================================= */
+/* INVENTÁRIO */
 
 .inventory-header {
   padding: 15px 22px;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 22px;
-  border-bottom: 1px solid #eceef2;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .inventory-title {
@@ -350,46 +352,30 @@
 }
 
 .inventory-tools {
-  display: flex;
-  align-items: center;
   gap: 10px;
 }
 
-
-/* =========================================================
-   BUSCA
-   ========================================================= */
+/* BUSCA */
 
 .search-box {
+  position: relative;
   width: 300px;
   height: 38px;
-  position: relative;
   display: flex;
   align-items: center;
 }
 
   .search-box input {
-    width: 100%;
     height: 100%;
     padding: 0 38px 0 37px;
     color: #343c4e;
-    font-family: inherit;
     font-size: 11px;
-    outline: none;
-    background: #fafbfc;
-    border: 1px solid #dfe2e8;
+    border-color: #dfe2e8;
     border-radius: 10px;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   }
 
     .search-box input::placeholder {
       color: #a5acb9;
-    }
-
-    .search-box input:focus {
-      background: #fff;
-      border-color: #766de5;
-      box-shadow: 0 0 0 3px rgba(100, 91, 221, 0.08);
     }
 
 .search-icon {
@@ -402,18 +388,16 @@
 }
 
 .clear-search {
-  width: 26px;
-  height: 26px;
   position: absolute;
   right: 7px;
-  display: grid;
-  place-items: center;
+  width: 26px;
+  height: 26px;
   color: #888fa0;
   font-size: 16px;
   cursor: pointer;
   background: transparent;
   border: 0;
-  border-radius: 7px;
+  border-radius: var(--radius-sm);
 }
 
   .clear-search:hover {
@@ -429,19 +413,14 @@
   font-weight: 750;
   background: #f5f6f8;
   border: 1px solid #e8eaee;
-  border-radius: 999px;
 }
 
-
-/* =========================================================
-   TABELA COM SCROLL INTERNO
-   ========================================================= */
+/* TABELA */
 
 .inventory-table-wrapper {
   width: 100%;
   max-height: 250px;
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: #c7c4ec transparent;
 }
@@ -457,17 +436,12 @@
 
   .inventory-table-wrapper::-webkit-scrollbar-thumb {
     background: #ccc9ee;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
   }
 
     .inventory-table-wrapper::-webkit-scrollbar-thumb:hover {
       background: #aaa6df;
     }
-
-
-/* =========================================================
-   TABELA
-   ========================================================= */
 
 table {
   width: 100%;
@@ -493,9 +467,9 @@ th {
   color: #8a92a3;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  background: #fafbfc;
+  background: var(--color-surface-soft);
 }
 
 td {
@@ -512,15 +486,12 @@ tbody tr:last-child td {
   border-bottom: 0;
 }
 
-
-/* =========================================================
-   PRODUTO
-   ========================================================= */
+/* PRODUTO */
 
 .product-code {
-  display: inline-flex;
   padding: 5px 8px;
-  color: #574ed0;
+  display: inline-flex;
+  color: var(--color-primary-dark);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   font-weight: 750;
@@ -529,8 +500,6 @@ tbody tr:last-child td {
 }
 
 .product-cell {
-  display: flex;
-  align-items: center;
   gap: 9px;
 }
 
@@ -538,13 +507,11 @@ tbody tr:last-child td {
   width: 32px;
   height: 32px;
   flex: 0 0 32px;
-  display: grid;
-  place-items: center;
   color: #fff;
   font-size: 11px;
   font-weight: 800;
-  background: linear-gradient( 135deg, #686fe3, #574bcc );
-  border-radius: 9px;
+  background: linear-gradient(135deg, #686fe3, #574bcc);
+  border-radius: var(--radius-md);
 }
 
 .product-description strong,
@@ -559,31 +526,29 @@ tbody tr:last-child td {
 
 .product-description small {
   margin-top: 2px;
-  color: #a0a6b2;
+  color: var(--color-muted-light);
   font-size: 8px;
 }
 
+/* SALDO */
+
 .stock-pill {
-  display: inline-flex;
   padding: 5px 9px;
-  color: #12865f;
+  display: inline-flex;
+  color: var(--color-success-dark);
   font-size: 10px;
   font-weight: 750;
-  background: #eaf9f3;
+  background: var(--color-success-soft);
   border: 1px solid #d5f1e5;
-  border-radius: 999px;
 }
 
 .stock-pill-low {
   color: #ae6a15;
-  background: #fff7e7;
+  background: var(--color-warning-soft);
   border-color: #f6e3bd;
 }
 
-
-/* =========================================================
-   AÇÕES
-   ========================================================= */
+/* AÇÕES DA TABELA */
 
 .table-actions-heading,
 .table-actions {
@@ -597,25 +562,16 @@ tbody tr:last-child td {
 .action-button {
   min-height: 30px;
   padding: 0 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: 5px;
-  font-family: inherit;
   font-size: 9px;
   font-weight: 700;
-  cursor: pointer;
   background: transparent;
-  border-radius: 7px;
-  transition: background 0.15s ease, transform 0.15s ease;
+  border-radius: var(--radius-sm);
+  transition: .15s ease;
 }
 
   .action-button + .action-button {
     margin-left: 5px;
-  }
-
-  .action-button:hover {
-    transform: translateY(-1px);
   }
 
 .edit-action {
@@ -628,18 +584,15 @@ tbody tr:last-child td {
   }
 
 .delete-action {
-  color: #c25c65;
+  color: var(--color-danger);
   border: 1px solid #efdadd;
 }
 
   .delete-action:hover {
-    background: #fff3f4;
+    background: var(--color-danger-soft);
   }
 
-
-/* =========================================================
-   SEM RESULTADOS
-   ========================================================= */
+/* ESTADO VAZIO */
 
 .empty-inventory {
   min-height: 140px;
@@ -655,8 +608,6 @@ tbody tr:last-child td {
   width: 42px;
   height: 42px;
   margin-bottom: 9px;
-  display: grid;
-  place-items: center;
   color: #6b62dc;
   font-size: 16px;
   background: #f1f0ff;
@@ -665,7 +616,7 @@ tbody tr:last-child td {
 
 .empty-inventory h3 {
   margin: 0;
-  color: #30384a;
+  color: var(--color-text-strong);
   font-size: 13px;
 }
 
@@ -691,7 +642,7 @@ tbody tr:last-child td {
   font-weight: 750;
   cursor: pointer;
   background: #f1f0ff;
-  border: 1px solid #dedbfa;
+  border: 1px solid var(--color-border-primary);
   border-radius: 8px;
 }
 
@@ -699,10 +650,7 @@ tbody tr:last-child td {
     background: #e9e7ff;
   }
 
-
-/* =========================================================
-   RESPONSIVO
-   ========================================================= */
+/* RESPONSIVO */
 
 @media (max-width: 900px) {
   .inventory-header {
@@ -768,15 +716,12 @@ tbody tr:last-child td {
     flex-direction: column;
   }
 
-  .search-box {
+  .search-box,
+  .button {
     width: 100%;
   }
 
   .inventory-counter {
     align-self: flex-start;
-  }
-
-  .button {
-    width: 100%;
   }
 }

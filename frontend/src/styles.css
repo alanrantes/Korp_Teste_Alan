@@ -1,3 +1,48 @@
+:root {
+  /* CORES PRINCIPAIS */
+  --color-primary: #5147dc;
+  --color-primary-dark: #574ed0;
+  --color-primary-light: #6b58e4;
+  --color-primary-soft: #f0efff;
+  --color-primary-soft-2: #f5f5ff;
+  /* TEXTO */
+  --color-text: #202638;
+  --color-text-strong: #30384a;
+  --color-text-secondary: #555e71;
+  --color-muted: #8d95a5;
+  --color-muted-light: #a0a6b2;
+  /* FUNDOS */
+  --color-page: #f5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fafbfc;
+  /* BORDAS */
+  --color-border: #e5e7ed;
+  --color-border-light: #eceef2;
+  --color-border-primary: #dedbfb;
+  /* STATUS */
+  --color-success: #20b981;
+  --color-success-dark: #12865f;
+  --color-success-soft: #eaf9f3;
+  --color-warning: #f1ac3d;
+  --color-warning-dark: #a6620d;
+  --color-warning-soft: #fff7e7;
+  --color-danger: #c25c65;
+  --color-danger-soft: #fff3f4;
+  /* RAIOS */
+  --radius-sm: 7px;
+  --radius-md: 9px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+  /* SOMBRAS */
+  --shadow-primary: 0 6px 14px rgba(81, 71, 220, 0.16);
+  --shadow-primary-lg: 0 10px 22px rgba(81, 71, 220, 0.22);
+  --shadow-card: 0 14px 38px rgba(31, 41, 55, 0.055);
+  /* TIPOGRAFIA */
+  --font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
 html,
 body {
   width: 100%;
@@ -12,8 +57,9 @@ html {
 
 body {
   min-height: 100vh;
-  background: #f5f7fb;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--color-text);
+  background: var(--color-page);
+  font-family: var(--font-family);
 }
 
 button,
@@ -21,4 +67,8 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+button {
+  font-family: inherit;
 }

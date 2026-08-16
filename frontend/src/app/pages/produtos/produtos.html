@@ -1,99 +1,51 @@
 <section class="products-page">
 
-  <!-- RESUMO -->
-
   <div class="overview-row">
-
     <div class="overview-item">
-
-      <div class="overview-icon">
-        ▦
-      </div>
+      <div class="overview-icon">▦</div>
 
       <div class="overview-data">
         <span class="overview-label">PRODUTOS</span>
-
-        <strong>
-          {{ produtos.length }}
-        </strong>
-
+        <strong>{{ produtos.length }}</strong>
         <small>
-          {{
-            produtos.length === 1
-              ? 'produto cadastrado'
-              : 'produtos cadastrados'
-          }}
+          {{ produtos.length === 1 ? 'produto cadastrado' : 'produtos cadastrados' }}
         </small>
       </div>
-
     </div>
-
 
     <div class="overview-divider"></div>
 
-
     <div class="overview-item">
-
-      <div class="overview-icon overview-icon-success">
-        ✓
-      </div>
+      <div class="overview-icon overview-icon-success">✓</div>
 
       <div class="overview-data">
         <span class="overview-label">STATUS</span>
-
-        <strong class="status-title">
-          Sincronizado
-        </strong>
-
-        <small>
-          Dados persistidos no serviço de estoque
-        </small>
+        <strong class="status-title">Sincronizado</strong>
+        <small>Dados persistidos no serviço de estoque</small>
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- CADASTRO -->
-
   <div class="form-card">
-
     <div class="card-header">
-
       <div>
-        <span class="section-kicker">
-          CADASTRO
-        </span>
-
-        <h2>
-          {{ editando ? 'Editar produto' : 'Novo produto' }}
-        </h2>
-
-        <p>
-          Informe os dados do produto para atualizar o catálogo de estoque.
-        </p>
+        <span class="section-kicker">CADASTRO</span>
+        <h2>{{ editando ? 'Editar produto' : 'Novo produto' }}</h2>
+        <p>Informe os dados do produto para atualizar o catálogo de estoque.</p>
       </div>
 
-
-      <div class="editing-badge"
-           *ngIf="editando">
+      <div *ngIf="editando"
+           class="editing-badge">
         Modo edição
       </div>
-
     </div>
-
 
     <form class="product-form"
           (ngSubmit)="salvar()">
 
       <div class="fields-grid">
-
         <div class="field-group">
-
-          <label for="codigo">
-            Código
-          </label>
+          <label for="codigo">Código</label>
 
           <input id="codigo"
                  name="codigo"
@@ -102,18 +54,11 @@
                  placeholder="Ex.: PROD001"
                  required />
 
-          <small>
-            Identificador único do produto.
-          </small>
-
+          <small>Identificador único do produto.</small>
         </div>
 
-
         <div class="field-group">
-
-          <label for="saldo">
-            Saldo inicial
-          </label>
+          <label for="saldo">Saldo inicial</label>
 
           <input id="saldo"
                  name="saldo"
@@ -123,18 +68,11 @@
                  placeholder="0"
                  required />
 
-          <small>
-            Quantidade disponível em estoque.
-          </small>
-
+          <small>Quantidade disponível em estoque.</small>
         </div>
 
-
         <div class="field-group field-description">
-
-          <label for="descricao">
-            Descrição
-          </label>
+          <label for="descricao">Descrição</label>
 
           <input id="descricao"
                  name="descricao"
@@ -143,84 +81,44 @@
                  placeholder="Ex.: Teclado Mecânico RGB"
                  required />
 
-          <small>
-            Nome ou descrição comercial do item.
-          </small>
-
+          <small>Nome ou descrição comercial do item.</small>
         </div>
-
       </div>
 
-
       <div class="form-footer">
-
-        <button type="button"
+        <button *ngIf="editando"
+                type="button"
                 class="button button-secondary"
-                *ngIf="editando"
                 (click)="limparFormulario()">
           Cancelar edição
         </button>
 
         <button type="submit"
                 class="button button-primary">
-          <span>
-            {{ editando ? '✓' : '+' }}
-          </span>
-
-          {{
-            editando
-              ? 'Salvar alterações'
-              : 'Cadastrar produto'
-          }}
+          <span>{{ editando ? '✓' : '+' }}</span>
+          {{ editando ? 'Salvar alterações' : 'Cadastrar produto' }}
         </button>
-
       </div>
-
     </form>
-
 
     <div *ngIf="mensagem"
          class="message-box">
       <span class="message-icon">i</span>
-
-      <span>
-        {{ mensagem }}
-      </span>
+      <span>{{ mensagem }}</span>
     </div>
-
   </div>
 
-
-  <!-- INVENTÁRIO -->
-
   <div class="inventory-card">
-
     <div class="inventory-header">
-
       <div class="inventory-title">
-
-        <span class="section-kicker">
-          INVENTÁRIO
-        </span>
-
-        <h2>
-          Produtos cadastrados
-        </h2>
-
-        <p>
-          Consulte, pesquise, edite ou remova os produtos disponíveis.
-        </p>
-
+        <span class="section-kicker">INVENTÁRIO</span>
+        <h2>Produtos cadastrados</h2>
+        <p>Consulte, pesquise, edite ou remova os produtos disponíveis.</p>
       </div>
 
-
       <div class="inventory-tools">
-
         <div class="search-box">
-
-          <span class="search-icon">
-            ⌕
-          </span>
+          <span class="search-icon">⌕</span>
 
           <input type="text"
                  name="termoBusca"
@@ -234,99 +132,61 @@
                   title="Limpar busca">
             ×
           </button>
-
         </div>
 
-
         <div class="inventory-counter">
-
           <ng-container *ngIf="!termoBusca">
             {{ produtos.length }}
             {{ produtos.length === 1 ? 'registro' : 'registros' }}
           </ng-container>
 
           <ng-container *ngIf="termoBusca">
-            {{ produtosFiltrados.length }}
-            de
-            {{ produtos.length }}
+            {{ produtosFiltrados.length }} de {{ produtos.length }}
           </ng-container>
-
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- TABELA -->
-
-    <div class="inventory-table-wrapper"
-         *ngIf="produtos.length > 0 && produtosFiltrados.length > 0">
+    <div *ngIf="produtos.length > 0 && produtosFiltrados.length > 0"
+         class="inventory-table-wrapper">
 
       <table>
-
         <thead>
           <tr>
             <th>Código</th>
             <th>Produto</th>
             <th>Saldo</th>
-            <th class="table-actions-heading">
-              Ações
-            </th>
+            <th class="table-actions-heading">Ações</th>
           </tr>
         </thead>
 
-
         <tbody>
-
           <tr *ngFor="let produto of produtosFiltrados">
-
             <td>
-
-              <span class="product-code">
-                {{ produto.codigo }}
-              </span>
-
+              <span class="product-code">{{ produto.codigo }}</span>
             </td>
 
-
             <td>
-
               <div class="product-cell">
-
                 <div class="product-avatar">
                   {{ produto.descricao.charAt(0).toUpperCase() }}
                 </div>
 
                 <div class="product-description">
-
-                  <strong>
-                    {{ produto.descricao }}
-                  </strong>
-
-                  <small>
-                    ID #{{ produto.id }}
-                  </small>
-
+                  <strong>{{ produto.descricao }}</strong>
+                  <small>ID #{{ produto.id }}</small>
                 </div>
-
               </div>
-
             </td>
 
-
             <td>
-
               <span class="stock-pill"
                     [class.stock-pill-low]="produto.saldo <= 5">
                 {{ produto.saldo }} un.
               </span>
-
             </td>
 
-
             <td class="table-actions">
-
               <button type="button"
                       class="action-button edit-action"
                       (click)="editar(produto)">
@@ -334,37 +194,22 @@
                 Editar
               </button>
 
-
               <button type="button"
                       class="action-button delete-action"
                       (click)="excluir(produto.id)">
                 <span>×</span>
                 Excluir
               </button>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
-
-
-    <!-- BUSCA SEM RESULTADO -->
 
     <div *ngIf="produtos.length > 0 && produtosFiltrados.length === 0"
          class="empty-inventory">
-
-      <div class="empty-illustration">
-        ⌕
-      </div>
-
-      <h3>
-        Nenhum produto encontrado
-      </h3>
+      <div class="empty-illustration">⌕</div>
+      <h3>Nenhum produto encontrado</h3>
 
       <p>
         Não encontramos produtos para
@@ -377,29 +222,14 @@
               (click)="limparBusca()">
         Limpar pesquisa
       </button>
-
     </div>
-
-
-    <!-- SEM PRODUTOS -->
 
     <div *ngIf="produtos.length === 0"
          class="empty-inventory">
-
-      <div class="empty-illustration">
-        ▦
-      </div>
-
-      <h3>
-        Nenhum produto cadastrado
-      </h3>
-
-      <p>
-        Utilize o formulário acima para adicionar o primeiro produto ao estoque.
-      </p>
-
+      <div class="empty-illustration">▦</div>
+      <h3>Nenhum produto cadastrado</h3>
+      <p>Utilize o formulário acima para adicionar o primeiro produto ao estoque.</p>
     </div>
-
   </div>
 
 </section>

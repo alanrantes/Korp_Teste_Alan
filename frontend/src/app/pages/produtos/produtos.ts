@@ -13,18 +13,11 @@ import { Atualizacao } from '../../services/atualizacao';
 })
 export class Produtos implements OnInit {
   produtos: Produto[] = [];
-
   termoBusca = '';
-
-  produtoForm: Produto = {
-    id: 0,
-    codigo: '',
-    descricao: '',
-    saldo: 0,
-  };
-
   editando = false;
   mensagem = '';
+
+  produtoForm: Produto = this.novoProduto();
 
   constructor(
     private produtoService: ProdutoService,
@@ -35,70 +28,42 @@ export class Produtos implements OnInit {
   ngOnInit(): void {
     this.carregarProdutos();
 
-    this.atualizacao.estoqueAtualizado$.subscribe(() => {
-      this.carregarProdutos();
-    });
+    this.atualizacao.estoqueAtualizado$.subscribe(() =>
+      this.carregarProdutos()
+    );
   }
 
   get produtosFiltrados(): Produto[] {
     const termo = this.termoBusca.trim().toLowerCase();
 
-    if (!termo) {
-      return this.produtos;
-    }
-
-    return this.produtos.filter((produto) =>
-      produto.codigo.toLowerCase().includes(termo) ||
-      produto.descricao.toLowerCase().includes(termo)
-    );
+    return termo
+      ? this.produtos.filter(({ codigo, descricao }) =>
+        codigo.toLowerCase().includes(termo) ||
+        descricao.toLowerCase().includes(termo)
+      )
+      : this.produtos;
   }
 
   carregarProdutos(): void {
     this.produtoService.listar().subscribe({
-      next: (dados) => {
-        this.produtos = dados;
-        this.cdr.markForCheck();
+      next: (produtos) => {
+        this.produtos = produtos;
+        this.atualizarTela();
       },
-      error: () => {
-        this.mensagem = 'Erro ao carregar produtos.';
-        this.cdr.markForCheck();
-      },
+      error: () => this.definirMensagem('Erro ao carregar produtos.'),
     });
   }
 
   salvar(): void {
     if (this.editando) {
-      this.produtoService
-        .atualizar(this.produtoForm.id, this.produtoForm)
-        .subscribe({
-          next: () => {
-            this.mensagem = 'Produto atualizado com sucesso.';
-            this.limparFormulario();
-            this.carregarProdutos();
-            this.cdr.markForCheck();
-          },
-          error: (erro) => {
-            this.mensagem =
-              erro.error ?? 'Erro ao atualizar produto.';
-            this.cdr.markForCheck();
-          },
-        });
-
+      this.atualizarProduto();
       return;
     }
 
     this.produtoService.criar(this.produtoForm).subscribe({
-      next: () => {
-        this.mensagem = 'Produto cadastrado com sucesso.';
-        this.limparFormulario();
-        this.carregarProdutos();
-        this.cdr.markForCheck();
-      },
-      error: (erro) => {
-        this.mensagem =
-          erro.error ?? 'Erro ao cadastrar produto.';
-        this.cdr.markForCheck();
-      },
+      next: () => this.finalizarAcao('Produto cadastrado com sucesso.'),
+      error: (erro) =>
+        this.definirMensagem(erro.error ?? 'Erro ao cadastrar produto.'),
     });
   }
 
@@ -109,30 +74,55 @@ export class Produtos implements OnInit {
 
   excluir(id: number): void {
     this.produtoService.excluir(id).subscribe({
-      next: () => {
-        this.mensagem = 'Produto excluído com sucesso.';
-        this.carregarProdutos();
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.mensagem = 'Erro ao excluir produto.';
-        this.cdr.markForCheck();
-      },
+      next: () => this.finalizarAcao('Produto excluído com sucesso.', false),
+      error: () => this.definirMensagem('Erro ao excluir produto.'),
     });
   }
 
   limparFormulario(): void {
-    this.produtoForm = {
-      id: 0,
-      codigo: '',
-      descricao: '',
-      saldo: 0,
-    };
-
+    this.produtoForm = this.novoProduto();
     this.editando = false;
   }
 
   limparBusca(): void {
     this.termoBusca = '';
+  }
+
+  private atualizarProduto(): void {
+    this.produtoService
+      .atualizar(this.produtoForm.id, this.produtoForm)
+      .subscribe({
+        next: () => this.finalizarAcao('Produto atualizado com sucesso.'),
+        error: (erro) =>
+          this.definirMensagem(erro.error ?? 'Erro ao atualizar produto.'),
+      });
+  }
+
+  private finalizarAcao(mensagem: string, limparFormulario = true): void {
+    this.mensagem = mensagem;
+
+    if (limparFormulario) {
+      this.limparFormulario();
+    }
+
+    this.carregarProdutos();
+  }
+
+  private definirMensagem(mensagem: string): void {
+    this.mensagem = mensagem;
+    this.atualizarTela();
+  }
+
+  private atualizarTela(): void {
+    this.cdr.markForCheck();
+  }
+
+  private novoProduto(): Produto {
+    return {
+      id: 0,
+      codigo: '',
+      descricao: '',
+      saldo: 0,
+    };
   }
 }

@@ -1,7 +1,6 @@
 <div class="app-shell">
 
   <header class="topbar">
-
     <button type="button"
             class="brand"
             (click)="alterarSecao('inicio')">
@@ -14,7 +13,6 @@
     </button>
 
     <nav class="main-nav">
-
       <button type="button"
               class="nav-item"
               [class.active]="secaoAtual === 'inicio'"
@@ -38,38 +36,24 @@
         <span class="nav-icon">▤</span>
         Notas Fiscais
       </button>
-
     </nav>
 
     <div class="system-status">
       <span class="status-dot"></span>
       Sistema online
     </div>
-
   </header>
-
-
-  <!-- VISÃO GERAL -->
 
   <main *ngIf="secaoAtual === 'inicio'"
         class="home-content">
 
     <section class="hero">
-
       <div class="hero-content">
-
-        <span class="eyebrow">
-          PAINEL OPERACIONAL
-        </span>
+        <span class="eyebrow">PAINEL OPERACIONAL</span>
 
         <h1>
-          <span class="hero-title-main">
-            Controle de estoque
-          </span>
-
-          <span class="hero-title-accent">
-            e faturamento
-          </span>
+          <span class="hero-title-main">Controle de estoque</span>
+          <span class="hero-title-accent">e faturamento</span>
         </h1>
 
         <p>
@@ -78,7 +62,6 @@
         </p>
 
         <div class="hero-actions">
-
           <button type="button"
                   class="hero-primary"
                   (click)="alterarSecao('produtos')">
@@ -91,25 +74,19 @@
                   (click)="alterarSecao('faturamento')">
             Acessar faturamento
           </button>
-
         </div>
-
       </div>
 
-
       <div class="hero-visual">
-
         <div class="visual-card visual-card-back"></div>
 
         <div class="visual-card visual-card-main">
-
           <div class="visual-header">
             <div class="visual-logo">K</div>
             <span>Fluxo integrado</span>
           </div>
 
           <div class="flow">
-
             <div class="flow-item">
               <span>01</span>
               Produto
@@ -128,38 +105,24 @@
               <span>03</span>
               Baixa
             </div>
-
           </div>
 
           <div class="visual-footer">
             <span class="status-dot"></span>
             Microsserviços conectados
           </div>
-
         </div>
-
       </div>
-
     </section>
 
-
     <section class="overview">
-
       <div class="overview-heading">
         <span class="eyebrow">MÓDULOS</span>
-
-        <h2>
-          Tudo o que você precisa em um só lugar
-        </h2>
-
-        <p>
-          Escolha uma área para gerenciar o estoque ou acompanhar o faturamento.
-        </p>
+        <h2>Tudo o que você precisa em um só lugar</h2>
+        <p>Escolha uma área para gerenciar o estoque ou acompanhar o faturamento.</p>
       </div>
 
-
       <div class="overview-grid">
-
         <button type="button"
                 class="overview-card"
                 (click)="alterarSecao('produtos')">
@@ -167,17 +130,12 @@
 
           <div class="overview-content">
             <span>ESTOQUE</span>
-
             <h3>Gestão de Produtos</h3>
-
-            <p>
-              Cadastro, edição, exclusão e acompanhamento de saldo.
-            </p>
+            <p>Cadastro, edição, exclusão e acompanhamento de saldo.</p>
           </div>
 
           <div class="overview-arrow">→</div>
         </button>
-
 
         <button type="button"
                 class="overview-card"
@@ -186,51 +144,31 @@
 
           <div class="overview-content">
             <span>FATURAMENTO</span>
-
             <h3>Notas Fiscais</h3>
-
-            <p>
-              Emissão, impressão e baixa automática de estoque.
-            </p>
+            <p>Emissão, impressão e baixa automática de estoque.</p>
           </div>
 
           <div class="overview-arrow">→</div>
         </button>
-
       </div>
-
     </section>
-
   </main>
-
-
-  <!-- PRODUTOS -->
 
   <main *ngIf="secaoAtual === 'produtos'"
         class="page-content products-page-content">
-
     <div class="module-card">
       <app-produtos></app-produtos>
     </div>
-
   </main>
-
-
-  <!-- FATURAMENTO -->
-  <!-- FATURAMENTO -->
 
   <main *ngIf="secaoAtual === 'faturamento'"
         class="page-content invoices-page-content">
-
     <div class="module-card">
       <app-notas-fiscais></app-notas-fiscais>
     </div>
-
   </main>
 
-
   <footer class="footer">
-
     <div>
       <strong>Korp</strong>
       <span>•</span>
@@ -244,7 +182,6 @@
       <span>+</span>
       SQL Server
     </div>
-
   </footer>
 
 </div>

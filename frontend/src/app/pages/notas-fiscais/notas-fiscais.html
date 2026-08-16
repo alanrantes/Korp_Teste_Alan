@@ -1,300 +1,151 @@
 <section class="notas-container">
 
-  <!-- RESUMO -->
-
   <div class="stats-panel">
-
     <div class="stats-header">
-
       <div>
-        <span class="panel-kicker">
-          FATURAMENTO
-        </span>
-
-        <h3>
-          Resumo das notas
-        </h3>
-
-        <p>
-          Acompanhe rapidamente a situação dos documentos fiscais.
-        </p>
+        <span class="panel-kicker">FATURAMENTO</span>
+        <h3>Resumo das notas</h3>
+        <p>Acompanhe rapidamente a situação dos documentos fiscais.</p>
       </div>
 
       <div class="integration-summary">
-
         <div class="integration-item">
           <span class="integration-dot"></span>
-
           <div>
-            <strong>
-              Faturamento conectado
-            </strong>
-
-            <small>
-              Microsserviço ativo
-            </small>
+            <strong>Faturamento conectado</strong>
+            <small>Microsserviço ativo</small>
           </div>
         </div>
 
         <div class="integration-item">
           <span class="integration-dot integration-purple"></span>
-
           <div>
-            <strong>
-              Baixa automática
-            </strong>
-
-            <small>
-              Estoque integrado
-            </small>
+            <strong>Baixa automática</strong>
+            <small>Estoque integrado</small>
           </div>
         </div>
-
       </div>
-
     </div>
 
-
     <div class="stats-grid">
-
       <div class="stat-card">
-
-        <div class="stat-icon">
-          NF
-        </div>
-
+        <div class="stat-icon">NF</div>
         <div>
-          <span class="stat-label">
-            Total
-          </span>
-
-          <strong class="stat-value">
-            {{ notas.length }}
-          </strong>
-
-          <small>
-            notas cadastradas
-          </small>
+          <span class="stat-label">Total</span>
+          <strong class="stat-value">{{ notas.length }}</strong>
+          <small>notas cadastradas</small>
         </div>
-
       </div>
 
-
       <div class="stat-card stat-open">
-
-        <div class="stat-icon stat-icon-open">
-          ◷
-        </div>
-
+        <div class="stat-icon stat-icon-open">◷</div>
         <div>
-          <span class="stat-label">
-            Abertas
-          </span>
-
+          <span class="stat-label">Abertas</span>
           <strong class="stat-value">
             {{ notas.filter(n => n.status === 'Aberta').length }}
           </strong>
-
-          <small>
-            aguardando impressão
-          </small>
+          <small>aguardando impressão</small>
         </div>
-
       </div>
 
-
       <div class="stat-card stat-closed">
-
-        <div class="stat-icon stat-icon-closed">
-          ✓
-        </div>
-
+        <div class="stat-icon stat-icon-closed">✓</div>
         <div>
-          <span class="stat-label">
-            Fechadas
-          </span>
-
+          <span class="stat-label">Fechadas</span>
           <strong class="stat-value">
             {{ notas.filter(n => n.status === 'Fechada').length }}
           </strong>
-
-          <small>
-            processadas
-          </small>
+          <small>processadas</small>
         </div>
-
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- EMISSÃO -->
-
   <div class="creation-panel">
-
     <div class="panel-header">
-
       <div>
-        <span class="panel-kicker">
-          EMISSÃO
-        </span>
-
-        <h3>
-          Nova Nota Fiscal
-        </h3>
-
+        <span class="panel-kicker">EMISSÃO</span>
+        <h3>Nova Nota Fiscal</h3>
         <p>
           Selecione os produtos, informe as quantidades e monte a nota antes da impressão.
         </p>
       </div>
 
       <div class="panel-header-actions">
-
-        <!-- BOTÃO PARA REABRIR O RASCUNHO -->
-
         <button *ngIf="itens.length > 0"
                 type="button"
                 class="draft-trigger"
                 (click)="abrirRascunho()">
-
-          <span class="draft-trigger-icon">
-            ▤
-          </span>
+          <span class="draft-trigger-icon">▤</span>
 
           <span class="draft-trigger-text">
-            <small>
-              RASCUNHO
-            </small>
-
+            <small>RASCUNHO</small>
             <strong>
               {{ itens.length }}
               {{ itens.length === 1 ? 'item' : 'itens' }}
             </strong>
           </span>
-
         </button>
 
-
-        <div class="panel-icon">
-          NF
-        </div>
-
+        <div class="panel-icon">NF</div>
       </div>
-
     </div>
 
-
     <div class="item-form">
-
       <div class="form-group produto-field">
-
-        <label for="produto">
-          Produto
-        </label>
+        <label for="produto">Produto</label>
 
         <select id="produto"
                 name="produto"
                 [(ngModel)]="produtoSelecionado">
-
-          <option [ngValue]="0">
-            Selecione um produto
-          </option>
+          <option [ngValue]="0">Selecione um produto</option>
 
           <option *ngFor="let produto of produtos"
                   [ngValue]="produto.id">
-
             {{ produto.codigo }} - {{ produto.descricao }}
             (Saldo: {{ produto.saldo }})
-
           </option>
-
         </select>
-
       </div>
 
-
       <div class="form-group quantidade-field">
-
-        <label for="quantidade">
-          Quantidade
-        </label>
+        <label for="quantidade">Quantidade</label>
 
         <input id="quantidade"
                name="quantidade"
                type="number"
                min="1"
                [(ngModel)]="quantidade" />
-
       </div>
-
 
       <button type="button"
               class="btn btn-secondary-action"
               (click)="adicionarItem()">
-
         <span>+</span>
-
         Adicionar item
-
       </button>
-
     </div>
-
-
-    <!-- FEEDBACK -->
 
     <div class="feedback-area">
-
       <div *ngIf="mensagem"
            class="feedback-message">
-
-        <span class="feedback-icon">
-          i
-        </span>
-
-        <span>
-          {{ mensagem }}
-        </span>
-
+        <span class="feedback-icon">i</span>
+        <span>{{ mensagem }}</span>
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- HISTÓRICO -->
-
   <div class="history-panel">
-
     <div class="history-header">
-
       <div class="history-title">
-
-        <span class="panel-kicker">
-          HISTÓRICO
-        </span>
-
-        <h3>
-          Notas cadastradas
-        </h3>
-
-        <p>
-          Consulte, pesquise e acompanhe os documentos fiscais.
-        </p>
-
+        <span class="panel-kicker">HISTÓRICO</span>
+        <h3>Notas cadastradas</h3>
+        <p>Consulte, pesquise e acompanhe os documentos fiscais.</p>
       </div>
 
-
       <div class="history-tools">
-
         <div class="history-search">
-
-          <span class="search-icon">
-            ⌕
-          </span>
+          <span class="search-icon">⌕</span>
 
           <input type="text"
                  name="buscaNota"
@@ -306,181 +157,88 @@
                   class="clear-search"
                   (click)="limparBuscaNotas()"
                   title="Limpar busca">
-
             ×
-
           </button>
-
         </div>
 
-
         <span class="record-count">
-
           <ng-container *ngIf="buscaNota; else contadorNormal">
-
             {{ notasFiltradas.length }} de {{ notas.length }}
-
           </ng-container>
 
           <ng-template #contadorNormal>
-
             {{ notas.length }}
             {{ notas.length === 1 ? 'registro' : 'registros' }}
-
           </ng-template>
-
         </span>
-
       </div>
-
     </div>
-
-
-    <!-- TABELA -->
 
     <div *ngIf="notasFiltradas.length > 0"
          class="table-wrapper">
-
       <table>
-
         <thead>
-
           <tr>
-
-            <th>
-              Nota
-            </th>
-
-            <th>
-              Emissão
-            </th>
-
-            <th>
-              Status
-            </th>
-
-            <th>
-              Produto
-            </th>
-
-            <th class="quantity-column">
-              Quantidade
-            </th>
-
-            <th class="actions-column">
-              Ação
-            </th>
-
+            <th>Nota</th>
+            <th>Emissão</th>
+            <th>Status</th>
+            <th>Produto</th>
+            <th class="quantity-column">Quantidade</th>
+            <th class="actions-column">Ação</th>
           </tr>
-
         </thead>
 
-
         <tbody>
-
           <tr *ngFor="let nota of notasFiltradas">
-
             <td>
-
               <div class="invoice-number">
-
-                <span>
-                  NF
-                </span>
-
+                <span>NF</span>
                 #{{ nota.numero }}
-
               </div>
-
             </td>
 
-
             <td>
-
               <div class="date-info">
-
-                <strong>
-                  {{ nota.dataCriacao | date:'dd/MM/yyyy' }}
-                </strong>
-
-                <small>
-                  {{ nota.dataCriacao | date:'HH:mm' }}
-                </small>
-
+                <strong>{{ nota.dataCriacao | date:'dd/MM/yyyy' }}</strong>
+                <small>{{ nota.dataCriacao | date:'HH:mm' }}</small>
               </div>
-
             </td>
 
-
             <td>
-
               <span class="status-badge"
                     [class.status-open]="nota.status === 'Aberta'"
                     [class.status-closed]="nota.status === 'Fechada'">
-
                 <span class="badge-dot"></span>
-
                 {{ nota.status }}
-
               </span>
-
             </td>
-
-
-            <!-- PRODUTOS -->
 
             <td>
-
               <div class="invoice-products">
-
                 <div *ngFor="let item of nota.itens"
                      class="invoice-product">
-
                   {{ obterDescricaoProduto(item.produtoId) }}
-
                 </div>
-
               </div>
-
             </td>
-
-
-            <!-- QUANTIDADES -->
 
             <td class="quantity-column">
-
               <div class="invoice-quantities">
-
                 <div *ngFor="let item of nota.itens"
                      class="invoice-quantity">
-
                   {{ item.quantidade }} un.
-
                 </div>
-
               </div>
-
             </td>
 
-
-            <!-- AÇÃO -->
-
             <td class="actions-column">
-
               <button *ngIf="nota.status === 'Aberta'"
                       type="button"
                       class="print-button"
                       (click)="fecharNota(nota.id)"
                       [disabled]="notaProcessandoId === nota.id">
-
                 <span class="print-icon">
-
-                  {{
-                    notaProcessandoId === nota.id
-                      ? '•••'
-                      : '▣'
-                  }}
-
+                  {{ notaProcessandoId === nota.id ? '•••' : '▣' }}
                 </span>
 
                 {{
@@ -488,45 +246,23 @@
                     ? 'Processando...'
                     : 'Imprimir Nota'
                 }}
-
               </button>
-
 
               <div *ngIf="nota.status === 'Fechada'"
                    class="closed-label">
-
-                <span>
-                  ✓
-                </span>
-
+                <span>✓</span>
                 Processada
-
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </div>
 
-
-    <!-- BUSCA SEM RESULTADO -->
-
-    <div *ngIf="notas.length > 0 &&
-                notasFiltradas.length === 0"
+    <div *ngIf="notas.length > 0 && notasFiltradas.length === 0"
          class="empty-state">
-
-      <div class="empty-icon">
-        ⌕
-      </div>
-
-      <h4>
-        Nenhuma nota encontrada
-      </h4>
+      <div class="empty-icon">⌕</div>
+      <h4>Nenhuma nota encontrada</h4>
 
       <p>
         Não encontramos notas para
@@ -536,42 +272,18 @@
       <button type="button"
               class="clear-filter-button"
               (click)="limparBuscaNotas()">
-
         Limpar busca
-
       </button>
-
     </div>
-
-
-    <!-- SEM NOTAS -->
 
     <div *ngIf="notas.length === 0"
          class="empty-state">
-
-      <div class="empty-icon">
-        NF
-      </div>
-
-      <h4>
-        Nenhuma nota fiscal cadastrada
-      </h4>
-
-      <p>
-        Crie sua primeira nota adicionando produtos no formulário acima.
-      </p>
-
+      <div class="empty-icon">NF</div>
+      <h4>Nenhuma nota fiscal cadastrada</h4>
+      <p>Crie sua primeira nota adicionando produtos no formulário acima.</p>
     </div>
-
   </div>
-
 </section>
-
-
-<!-- ====================================================== -->
-<!-- MODAL DO RASCUNHO                                      -->
-<!-- FICA FORA DA NOTAS-CONTAINER PARA NÃO ALTERAR O LAYOUT -->
-<!-- ====================================================== -->
 
 <div *ngIf="modalRascunhoAberto"
      class="draft-modal-backdrop"
@@ -580,62 +292,29 @@
   <div class="draft-modal"
        (click)="$event.stopPropagation()">
 
-
-    <!-- CABEÇALHO DO MODAL -->
-
     <div class="draft-modal-header">
-
       <div class="draft-modal-title">
-
-        <div class="draft-modal-icon">
-          NF
-        </div>
+        <div class="draft-modal-icon">NF</div>
 
         <div>
-
-          <span class="panel-kicker">
-            RASCUNHO
-          </span>
-
-          <h3>
-            Itens da Nota Fiscal
-          </h3>
-
-          <p>
-            Revise os produtos antes de criar a nota.
-          </p>
-
+          <span class="panel-kicker">RASCUNHO</span>
+          <h3>Itens da Nota Fiscal</h3>
+          <p>Revise os produtos antes de criar a nota.</p>
         </div>
-
       </div>
-
 
       <button type="button"
               class="draft-modal-close"
               (click)="fecharRascunho()"
               title="Fechar">
-
         ×
-
       </button>
-
     </div>
 
-
-    <!-- RESUMO DO RASCUNHO -->
-
     <div class="draft-modal-summary">
-
       <div>
-
-        <span>
-          ITENS ADICIONADOS
-        </span>
-
-        <strong>
-          {{ itens.length }}
-        </strong>
-
+        <span>ITENS ADICIONADOS</span>
+        <strong>{{ itens.length }}</strong>
       </div>
 
       <small>
@@ -645,101 +324,57 @@
             : itens.length + ' produtos no rascunho'
         }}
       </small>
-
     </div>
 
-
-    <!-- LISTA DE ITENS -->
-
     <div class="draft-modal-body">
-
       <div class="draft-items">
-
         <div *ngFor="let item of itens; let i = index"
              class="draft-item">
 
           <div class="draft-product">
-
             <div class="draft-icon">
-
               {{
                 obterDescricaoProduto(item.produtoId)
                   .charAt(0)
                   .toUpperCase()
               }}
-
             </div>
-
 
             <div class="draft-product-info">
-
-              <strong>
-                {{ obterDescricaoProduto(item.produtoId) }}
-              </strong>
-
-              <small>
-                Produto selecionado
-              </small>
-
+              <strong>{{ obterDescricaoProduto(item.produtoId) }}</strong>
+              <small>Produto selecionado</small>
             </div>
-
           </div>
-
 
           <div class="draft-quantity">
-
-            <small>
-              QUANTIDADE
-            </small>
-
-            <strong>
-              {{ item.quantidade }} un.
-            </strong>
-
+            <small>QUANTIDADE</small>
+            <strong>{{ item.quantidade }} un.</strong>
           </div>
-
 
           <button type="button"
                   class="remove-button"
                   (click)="removerItem(i)"
                   title="Remover item">
-
             ×
-
           </button>
-
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- RODAPÉ DO MODAL -->
-
     <div class="draft-modal-footer">
-
       <button type="button"
               class="btn draft-cancel-button"
               (click)="fecharRascunho()">
-
         Continuar adicionando
-
       </button>
-
 
       <button type="button"
               class="btn btn-primary"
               (click)="criarNota()">
-
         <span>✓</span>
-
         Criar Nota Fiscal
-
       </button>
-
     </div>
 
   </div>
-
 </div>

@@ -2,17 +2,14 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import {
-  NotaFiscal,
-  NotaFiscalService
-} from '../../services/nota-fiscal';
-
-import {
-  Produto,
-  ProdutoService
-} from '../../services/produto';
-
+import { NotaFiscal, NotaFiscalService } from '../../services/nota-fiscal';
+import { Produto, ProdutoService } from '../../services/produto';
 import { Atualizacao } from '../../services/atualizacao';
+
+type ItemRascunho = {
+  produtoId: number;
+  quantidade: number;
+};
 
 @Component({
   selector: 'app-notas-fiscais',
@@ -24,22 +21,14 @@ import { Atualizacao } from '../../services/atualizacao';
 export class NotasFiscais implements OnInit {
   notas: NotaFiscal[] = [];
   produtos: Produto[] = [];
+  itens: ItemRascunho[] = [];
 
   produtoSelecionado = 0;
   quantidade = 1;
-
   buscaNota = '';
-
-  itens: {
-    produtoId: number;
-    quantidade: number;
-  }[] = [];
-
   mensagem = '';
-  notaProcessandoId: number | null = null;
-
-  // Controla a exibição do modal de rascunho
   modalRascunhoAberto = false;
+  notaProcessandoId: number | null = null;
 
   constructor(
     private notaFiscalService: NotaFiscalService,
@@ -54,75 +43,44 @@ export class NotasFiscais implements OnInit {
   }
 
   get notasFiltradas(): NotaFiscal[] {
-    const termo = this.buscaNota
-      .trim()
-      .toLowerCase();
+    const termo = this.buscaNota.trim().toLowerCase();
 
     if (!termo) {
       return this.notas;
     }
 
-    return this.notas.filter((nota) => {
-      const numeroNota = String(nota.numero).toLowerCase();
-
-      const encontrouNota =
-        numeroNota.includes(termo) ||
-        `#${numeroNota}`.includes(termo);
-
-      const encontrouProduto = nota.itens.some((item) => {
-        const produto = this.produtos.find(
-          (p) => p.id === item.produtoId
-        );
-
-        if (!produto) {
-          return String(item.produtoId).includes(termo);
-        }
-
-        return (
-          produto.codigo.toLowerCase().includes(termo) ||
-          produto.descricao.toLowerCase().includes(termo) ||
-          `${produto.codigo} ${produto.descricao}`
-            .toLowerCase()
-            .includes(termo)
-        );
-      });
-
-      return encontrouNota || encontrouProduto;
-    });
+    return this.notas.filter((nota) =>
+      String(nota.numero).includes(termo) ||
+      `#${nota.numero}`.includes(termo) ||
+      nota.itens.some((item) => this.produtoCorrespondeBusca(item.produtoId, termo))
+    );
   }
 
   carregarNotas(): void {
     this.notaFiscalService.listar().subscribe({
-      next: (dados) => {
-        this.notas = dados;
-        this.cdr.markForCheck();
+      next: (notas) => {
+        this.notas = notas;
+        this.atualizarTela();
       },
-      error: () => {
-        this.mensagem = 'Erro ao carregar notas fiscais.';
-        this.cdr.markForCheck();
-      },
+      error: () => this.definirMensagem('Erro ao carregar notas fiscais.'),
     });
   }
 
   carregarProdutos(): void {
     this.produtoService.listar().subscribe({
-      next: (dados) => {
-        this.produtos = dados;
-        this.cdr.markForCheck();
+      next: (produtos) => {
+        this.produtos = produtos;
+        this.atualizarTela();
       },
-      error: () => {
-        this.mensagem = 'Erro ao carregar produtos.';
-        this.cdr.markForCheck();
-      },
+      error: () => this.definirMensagem('Erro ao carregar produtos.'),
     });
   }
 
   adicionarItem(): void {
     if (this.produtoSelecionado <= 0 || this.quantidade <= 0) {
-      this.mensagem =
-        'Selecione um produto e informe uma quantidade válida.';
-
-      this.cdr.markForCheck();
+      this.definirMensagem(
+        'Selecione um produto e informe uma quantidade válida.'
+      );
       return;
     }
 
@@ -134,116 +92,74 @@ export class NotasFiscais implements OnInit {
     this.produtoSelecionado = 0;
     this.quantidade = 1;
     this.mensagem = '';
-
-    // Abre o modal automaticamente após adicionar o item
     this.abrirRascunho();
-
-    this.cdr.markForCheck();
   }
 
   removerItem(index: number): void {
     this.itens.splice(index, 1);
 
-    // Se remover o último item, fecha o modal
-    if (this.itens.length === 0) {
+    if (!this.itens.length) {
       this.fecharRascunho();
+      return;
     }
 
-    this.cdr.markForCheck();
+    this.atualizarTela();
   }
 
   abrirRascunho(): void {
-    if (this.itens.length === 0) {
+    if (!this.itens.length) {
       return;
     }
 
     this.modalRascunhoAberto = true;
-    this.cdr.markForCheck();
+    this.atualizarTela();
   }
 
   fecharRascunho(): void {
     this.modalRascunhoAberto = false;
-    this.cdr.markForCheck();
+    this.atualizarTela();
   }
 
   criarNota(): void {
-    if (this.itens.length === 0) {
-      this.mensagem =
-        'Adicione pelo menos um item à nota fiscal.';
-
+    if (!this.itens.length) {
+      this.definirMensagem('Adicione pelo menos um item à nota fiscal.');
       this.fecharRascunho();
       return;
     }
 
-    const nota: NotaFiscal = {
-      id: 0,
-      numero: 0,
-      status: 'Aberta',
-      dataCriacao: new Date().toISOString(),
-      itens: this.itens.map((item) => ({
-        id: 0,
-        notaFiscalId: 0,
-        produtoId: item.produtoId,
-        quantidade: item.quantidade,
-      })),
-    };
-
-    this.notaFiscalService.criar(nota).subscribe({
+    this.notaFiscalService.criar(this.montarNota()).subscribe({
       next: () => {
-        this.mensagem =
-          'Nota fiscal criada com sucesso.';
-
+        this.mensagem = 'Nota fiscal criada com sucesso.';
         this.itens = [];
-
-        // Fecha o modal depois da criação
         this.fecharRascunho();
-
         this.carregarNotas();
-
-        this.cdr.markForCheck();
       },
-      error: (erro) => {
-        this.mensagem =
-          typeof erro.error === 'string'
-            ? erro.error
-            : 'Erro ao criar nota fiscal.';
-
-        this.cdr.markForCheck();
-      },
+      error: (erro) =>
+        this.definirMensagem(
+          this.obterMensagemErro(erro, 'Erro ao criar nota fiscal.')
+        ),
     });
   }
 
   fecharNota(id: number): void {
     this.notaProcessandoId = id;
-
-    this.mensagem =
-      'Processando impressão da nota fiscal...';
-
-    this.cdr.markForCheck();
+    this.definirMensagem('Processando impressão da nota fiscal...');
 
     this.notaFiscalService.fechar(id).subscribe({
       next: () => {
-        this.mensagem =
-          'Nota fiscal impressa e fechada com sucesso.';
-
         this.notaProcessandoId = null;
+        this.mensagem = 'Nota fiscal impressa e fechada com sucesso.';
 
         this.carregarNotas();
         this.carregarProdutos();
-
         this.atualizacao.notificarEstoqueAtualizado();
-
-        this.cdr.markForCheck();
       },
       error: (erro) => {
         this.notaProcessandoId = null;
 
-        this.mensagem =
-          typeof erro.error === 'string'
-            ? erro.error
-            : 'Erro ao imprimir a nota fiscal.';
-
-        this.cdr.markForCheck();
+        this.definirMensagem(
+          this.obterMensagemErro(erro, 'Erro ao imprimir a nota fiscal.')
+        );
       },
     });
   }
@@ -253,12 +169,60 @@ export class NotasFiscais implements OnInit {
   }
 
   obterDescricaoProduto(produtoId: number): string {
-    const produto = this.produtos.find(
-      (p) => p.id === produtoId
-    );
+    const produto = this.buscarProduto(produtoId);
 
     return produto
       ? `${produto.codigo} - ${produto.descricao}`
       : `Produto ${produtoId}`;
+  }
+
+  private montarNota(): NotaFiscal {
+    return {
+      id: 0,
+      numero: 0,
+      status: 'Aberta',
+      dataCriacao: new Date().toISOString(),
+      itens: this.itens.map((item) => ({
+        id: 0,
+        notaFiscalId: 0,
+        ...item,
+      })),
+    };
+  }
+
+  private buscarProduto(produtoId: number): Produto | undefined {
+    return this.produtos.find((produto) => produto.id === produtoId);
+  }
+
+  private produtoCorrespondeBusca(produtoId: number, termo: string): boolean {
+    const produto = this.buscarProduto(produtoId);
+
+    if (!produto) {
+      return String(produtoId).includes(termo);
+    }
+
+    const codigo = produto.codigo.toLowerCase();
+    const descricao = produto.descricao.toLowerCase();
+
+    return (
+      codigo.includes(termo) ||
+      descricao.includes(termo) ||
+      `${codigo} ${descricao}`.includes(termo)
+    );
+  }
+
+  private obterMensagemErro(erro: any, padrao: string): string {
+    return typeof erro.error === 'string'
+      ? erro.error
+      : padrao;
+  }
+
+  private definirMensagem(mensagem: string): void {
+    this.mensagem = mensagem;
+    this.atualizarTela();
+  }
+
+  private atualizarTela(): void {
+    this.cdr.markForCheck();
   }
 }
