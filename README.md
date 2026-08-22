@@ -125,7 +125,7 @@ npm start
 Acesse:
 
 ```text
-http://localhost:4200
+http://localhost:xxxx
 ```
 
 > Para o funcionamento completo da aplicação, mantenha as duas APIs e o frontend executando simultaneamente.
