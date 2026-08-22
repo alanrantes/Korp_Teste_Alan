@@ -94,7 +94,7 @@ dotnet run --launch-profile https
 API:
 
 ```text
-https://localhost:7290
+https://localhost:xxxx
 ```
 
 ### 3. Executar Faturamento.Api
